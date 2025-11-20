@@ -1,0 +1,35 @@
+[
+  {
+    "id": "email_001",
+    "sender": "rahuldua@gmail.com",
+    "name": "Rahul Dua",
+    "subject": "APAR ID Update",
+    "body": "Dear user, Please update your APAR ID by end of this month. To avoid any inconvinience",
+    "timestamp": "2024-11-23 20:45:32",
+    "tags": [],
+    "action_items": [],
+    "is_read": false
+  },
+  {
+    "id": "email_002",
+    "sender": "oceanai@gmail.com",
+    "name": "OceanAI Talent recruit",
+    "subject": "Interview Schedule",
+    "body": "Dear Anush Jain, Congratulation you have been shortlisted for the next round for OceanAI and you need to schedule the interview for the same, Reply the free slots for interview to this mail.",
+    "timestamp": "2024-11-23 21:15:00",
+    "tags": [],
+    "action_items": [],
+    "is_read": false
+  },
+  {
+    "id": "email_003",
+    "sender": "justingifts@gmail.com",
+    "name": "Justin Jackson",
+    "subject": "Free 500$ gift card",
+    "body": "Dear Anush Jain, Congatulation you have been selected by our foundation to recieve 500$ in your bank account to claim this you have to share your bank details to this email kindly click the link http://giftcard.com attached before it get expire.",
+    "timestamp": "2024-11-23 22:00:00",
+    "tags": [],
+    "action_items": [],
+    "is_read": false
+  }
+]

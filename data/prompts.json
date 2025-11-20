@@ -1,0 +1,5 @@
+{
+  "categorization": "Categorize emails into: Important, Newsletter, Spam, To-Do. To-Do emails must include a direct request requiring user action.",
+  "action_extraction": "Extract tasks from the email. Respond in JSON: { \"task\": \"...\", \"deadline\": \"...\" }.",
+  "auto_reply": "If an email is a meeting request, draft a polite reply asking for an agenda. If it is a spam, ignore it."
+}
