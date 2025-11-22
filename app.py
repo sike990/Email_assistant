@@ -2,6 +2,8 @@ from services.data_manager import load_payload,save_data
 import streamlit as st 
 import json
 from services.llm_services import process_email
+from services.utils import parse_json_output,parse_list_output
+import time
 
 st.title("Email Assistant")
 
@@ -62,13 +64,29 @@ with st.sidebar.form(key="prompt_form"):
 for email in st.session_state["emails"]:
     expander = st.expander(f"**{email["name"]}** - {email['subject']}")
     expander.caption(f"Timestamp : {email["timestamp"]}")
-    expander.write(f"**Tag** : *{email['tags']}*")
-    expander.write("----")
+    expander.write(f"**Tag** : {email['tags']}")
+    expander.write("---")
     expander.write(email['body'])
 
 
-process_email = st.sidebar.button("Process Emails")
+process_email_button = st.sidebar.button("Process Emails")
 
-# if process_email:
-#     for email in st.state_session['emails']:
+if process_email_button:
+
+    with st.spinner("Processing..."):
+        progress_bar = st.progress(0)
+        for ind,email in enumerate(st.session_state["emails"]):
+            
+            # st.write(f"Processing email {email['id']}")
+            category_response = process_email(email['body'] , st.session_state["prompts"]["categorization"])
+            action_response = process_email(email['body'] , st.session_state['prompts']['action_extraction'])
+            
+            st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
+            st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
+            progress_bar.progress((ind+1)/len(st.session_state["emails"]))
+        save_data("mock_inbox.json" , st.session_state["emails"])
+        st.success("Process Completed")
+        time.sleep(1)
+        st.rerun()
+
 
