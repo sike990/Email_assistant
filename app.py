@@ -1,7 +1,7 @@
-from data_manager import load_payload
+from services.data_manager import load_payload,save_data
 import streamlit as st 
 import json
-from data_manager import save_data
+from services.llm_services import process_email
 
 st.title("Email Assistant")
 
@@ -57,3 +57,18 @@ with st.sidebar.form(key="prompt_form"):
         st.session_state['prompts']["action_extraction"] = action
         file = st.session_state["prompts"]
         save_data("prompts.json",file)
+
+
+for email in st.session_state["emails"]:
+    expander = st.expander(f"**{email["name"]}** - {email['subject']}")
+    expander.caption(f"Timestamp : {email["timestamp"]}")
+    expander.write(f"**Tag** : *{email['tags']}*")
+    expander.write("----")
+    expander.write(email['body'])
+
+
+process_email = st.sidebar.button("Process Emails")
+
+# if process_email:
+#     for email in st.state_session['emails']:
+

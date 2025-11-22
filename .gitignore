@@ -1,1 +1,3 @@
 myenv
+.env
+services/__pycache__/
