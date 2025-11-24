@@ -10,6 +10,10 @@ def format_email(email: dict) -> str:
     """Extracts relevant details from email and returns string"""
     return f"Sender's_name : {email['name']}\nSender's email : {email['sender']}\nRecieved at : {email['timestamp']}\nSubject : {email['subject']}\nBody : {email['body']}"
 
+def format_email_for_reply(email: dict) -> str:
+    """Extracts relevant details from email and returns string"""
+    return f"Sender's_name : {email['name']}\nSender's email : {email['sender']}\nRecieved at : {email['timestamp']}\nSubject : {email['subject']}\nBody : {email['body']}\nTags : {email.get('tags', [])}\nAction Item : {email.get('action_item', {})}"
+
 def select_email(email: dict) -> None:
     st.session_state['selected_email'] = email
 
@@ -41,77 +45,89 @@ if "drafts" not in st.session_state:
 # --- Sidebar Navigation ---
 with st.sidebar:
     st.title("📧 Email Assistant")
-    nav_selection = st.radio("Navigation", ["Inbox", "Global Agent", "Composed Mails", "Configuration"])
+    nav_selection = st.radio("**Navigation**", ["Inbox", "Global Agent", "Composed Mails", "Prompt Configuration"])
     
     st.divider()
     if nav_selection == "Inbox":
         if st.button("Process Emails", type="primary"):
-            with st.spinner("Processing..."):
+            with st.status("Processing Emails...", expanded=True) as status:
+                st.write("Categorizing and extracting actions...")
                 progress_bar = st.progress(0)
                 for ind, email in enumerate(st.session_state["emails"]):
-                    category_response = process_email(email['body'], st.session_state["prompts"]["categorization"])
-                    action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
+                    category_response = process_email(format_email(email), st.session_state["prompts"]["categorization"])
+                    action_response = process_email(format_email(email), st.session_state['prompts']['action_extraction'])
                     
                     st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
                     st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
                     progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
+                status.update(label="Processing Completed!", state="complete", expanded=False)
             save_data("mock_inbox.json", st.session_state["emails"])
-            st.success("Processing Completed")
             time.sleep(1)
             st.rerun()
 
-if nav_selection == "Configuration":
-    st.header("⚙️ Configuration")
+# --- Main Content ---
+
+if nav_selection == "Prompt Configuration":
+    st.header("⚙️ Prompt Configuration")
+   
     with st.form(key="prompt_form"):
-        category = st.text_area(label="Categorization", value=st.session_state["prompts"]["categorization"])
-        action = st.text_area(label="Action", value=st.session_state["prompts"]["action_extraction"])
-        reply = st.text_area(label="Auto-reply", value=st.session_state["prompts"]["auto_reply"])
+        category = st.text_area(label="**Categorization**", value=st.session_state["prompts"]["categorization"], height=350)
+        action = st.text_area(label="**Action**", value=st.session_state["prompts"]["action_extraction"], height=350)
+        reply = st.text_area(label="**Auto-reply**", value=st.session_state["prompts"]["auto_reply"], height=350)
         button_container = st.container(horizontal=True)
         with button_container:
             col1,col2,col3,col4,col5 = st.columns([1,1,2,1,1])
             with col3:
                 submit = st.form_submit_button("Save  Prompts",width="stretch")
-        if submit:
-            st.session_state["prompts"]["auto_reply"] = reply
-            st.session_state["prompts"]["categorization"] = category
-            st.session_state['prompts']["action_extraction"] = action
-            save_data("prompts.json", st.session_state["prompts"])
-            st.success("Saved Prompts")
+    if submit:
+        st.session_state["prompts"]["auto_reply"] = reply
+        st.session_state["prompts"]["categorization"] = category
+        st.session_state['prompts']["action_extraction"] = action
+        save_data("prompts.json", st.session_state["prompts"])
+        st.success("Saved Prompts")
 
-# --- Main Content ---
+
 
 if nav_selection == "Inbox":
-    st.header("Inbox")
+    st.header("📨 Inbox")
     
     # Compose Button (Top Right of Inbox Container)
     col_header, col_compose = st.columns([0.85, 0.15])
     with col_compose:
-        if st.button("➕ Compose New"):
+        if st.button("➕ Compose New"): 
             st.session_state["compose_mode"] = not st.session_state["compose_mode"]
 
     # Compose Modal/Area
     if st.session_state["compose_mode"]:
         with st.container(border=True):
             st.subheader("New Email Draft")
-            new_recipient = st.text_input("To:")
-            new_subject = st.text_input("Subject:")
-            new_prompt = st.text_area("Instructions for AI (e.g., 'Ask for a meeting next Tuesday'):")
             
-            c1, c2 = st.columns([0.2, 0.8])
-            with c1:
-                if st.button("Generate Draft"):
-                    if new_recipient and new_subject and new_prompt:
-                        with st.spinner("Drafting..."):
-                            draft_body = generate_draft(new_prompt, new_recipient, new_subject)
-                            st.session_state["new_draft_body"] = draft_body
-                    else:
-                        st.warning("Please fill in all fields.")
+            # Use a form to prevent reruns on every keystroke
+            with st.form(key="compose_form"):
+                new_recipient = st.text_input("To:")
+                new_subject = st.text_input("Subject:")
+                new_prompt = st.text_area("Instructions for AI (e.g., 'Ask for a meeting next Tuesday'):")
+                
+                c1, c2 = st.columns([0.2, 0.8])
+                with c1:
+                    generate_submitted = st.form_submit_button("Generate Draft")
+            
+            if generate_submitted:
+                if new_recipient and new_subject and new_prompt:
+                    with st.spinner("Drafting..."):
+                        draft_body = generate_draft(new_prompt, new_recipient, new_subject)
+                        st.session_state["new_draft_body"] = draft_body
+                else:
+                    st.warning("Please fill in all fields.")
             
             if "new_draft_body" in st.session_state:
-                st.text_area("Generated Body:", value=st.session_state["new_draft_body"], height=200)
-                if st.button("Save to Drafts"):
+                with st.form(key="save_draft_form"):
+                    st.text_area("Generated Body:", value=st.session_state["new_draft_body"], height=200)
+                    save_submitted = st.form_submit_button("Save to Drafts")
+                
+                if save_submitted:
                     new_draft = {
-                        "recipient": new_recipient,
+                        "recipient": new_recipient, # Note: This might be lost if not persisted, but for now it's okay as it's in the same rerun cycle if generated
                         "subject": new_subject,
                         "body": st.session_state["new_draft_body"],
                         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
@@ -184,15 +200,18 @@ if nav_selection == "Inbox":
                 st.subheader("Reply Agent")
                 if st.button("Generate Reply"):
                     with st.spinner("Generating..."):
-                        reply_draft = process_email(format_email(email), st.session_state["prompts"]["auto_reply"])
+                        reply_draft = process_email(format_email_for_reply(email), st.session_state["prompts"]["auto_reply"])
                         email['reply'] = reply_draft
                         save_data("mock_inbox.json", st.session_state["emails"])
                         st.rerun()
                 
                 if email.get("reply"):
                     with st.expander(label="Draft Reply", expanded=True):
-                        edited_reply = st.text_area(label="", value=email["reply"], height=150)
-                        if st.button("Save Draft"):
+                        with st.form(key=f"edit_reply_form_{email['id']}"):
+                            edited_reply = st.text_area(label="", value=email["reply"], height=150)
+                            save_draft_btn = st.form_submit_button("Save Draft")
+                            
+                        if save_draft_btn:
                             email["reply"] = edited_reply
                             save_data("mock_inbox.json", st.session_state["emails"])
                             st.success("Draft saved.")
@@ -240,7 +259,7 @@ elif nav_selection == "Composed Mails":
                 # st.button("Edit", key=f"edit_draft_{i}") 
 
 elif nav_selection == "Global Agent":
-    st.header("🌍 Global Inbox Agent")
+    st.header("🌐 Global Inbox Agent")
     st.markdown("Ask questions about your entire inbox (e.g., 'What are my most urgent tasks?', 'Summarize unread emails').")
     
     global_chat_container = st.container()

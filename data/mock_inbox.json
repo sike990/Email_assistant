@@ -6,8 +6,16 @@
     "subject": "IMPORTANT: KYC Update Required Immediately",
     "body": "Dear Customer, Your KYC details are pending update. As per RBI guidelines, your account will be frozen if not updated within 24 hours. Please visit your nearest branch or log in to netbanking to submit the required documents. Regards, HDFC Bank.",
     "timestamp": "2025-11-24 09:15:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Submit KYC details or visit nearest branch to update account",
+      "deadline": "Within 24 hours"
+    },
+    "reply": "Dear HDFC Bank Alerts,\n\nI think there's been a misunderstanding - I'm not a customer of HDFC Bank, nor do I have an account with your institution. I'd appreciate it if you could refrain from sending me future emails regarding my non-existent account. Perhaps you could update your email list with more accurate contact information?\n\nBest regards,"
   },
   {
     "id": "email_002",
@@ -16,8 +24,16 @@
     "subject": "Selection Update - Next Round",
     "body": "Dear Anush Jain,\n\nWe are pleased to inform you that you have been shortlisted for the next round of our selection process at OceanAI (MariApps Marine Solutions Private Limited).\n\nYour performance in the previous round was impressive. We will be sharing the details regarding the schedule and format of the next round shortly.\n\nCongratulations and best of luck!\n\nWarm regards,\nHR Team\nOceanAI",
     "timestamp": "2025-11-24 10:05:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "None",
+      "deadline": "None"
+    },
+    "reply": "Dear Anush Jain,\n\nWe are delighted to hear that you have been shortlisted for the next round of our selection process. Your performance in the previous round was indeed impressive, and we are eager to see your progress in the next stage.\n\nTo confirm, we will be sharing the details regarding the schedule and format of the next round with you shortly. If there's any specific information you need in the meantime or would like to clarify, please don't hesitate to reach out.\n\nOnce again, congratulations and best of luck in the next round. We look forward to hearing from you soon.\n\nBest regards,\nThe HR Team"
   },
   {
     "id": "email_003",
@@ -26,8 +42,16 @@
     "subject": "Diwali Celebration & Rangoli Competition",
     "body": "Hi Team, We are hosting a Rangoli competition tomorrow at 4 PM in the cafeteria. Traditional wear is encouraged. Snacks (Samosas and Jalebis) will be served. Attendance is mandatory for the town hall at 5 PM. Let's make this festive!",
     "timestamp": "2025-11-24 10:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Host Rangoli competition in the cafeteria",
+      "deadline": "Tomorrow at 4 PM"
+    },
+    "reply": "Hi Priya, \n\nThank you for organizing the Diwali celebration and Rangoli competition. I'm looking forward to participating in the event and representing our team's creativity. I'll make sure to attend the town hall meeting at 5 PM as required. Please let me know if there's an agenda for the meeting so I can come prepared.\n\nBest regards, \n[Your Name]"
   },
   {
     "id": "email_004",
@@ -36,8 +60,16 @@
     "subject": "You + Biryani = ❤️",
     "body": "Hey Anush, We saw you looking at that Biryani yesterday. Why play hard to get? Order now and get 40% off. Your stomach called, it wants a treat.",
     "timestamp": "2025-11-24 13:05:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter",
+      "Spam"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "None",
+      "deadline": "None"
+    },
+    "reply": "Dear Zomato Team,\n\nI'm flattered by the personalized attention, but I'm not quite ready to surrender to the allure of discounted Biryani just yet. Maybe you could work on perfecting your algorithms to understand the nuances of human hunger (and dating lives).\n\nBest regards,\n[Your Name]"
   },
   {
     "id": "email_005",
@@ -46,8 +78,14 @@
     "subject": "URGENT: INHERITANCE CLAIM $5,000,000",
     "body": "Dearest Beloved, I am the executor of a large estate. You have been named beneficiary. Kindly click this link http://bit.ly/claim-money-now to provide your bank details and pay a small processing fee. God Bless.",
     "timestamp": "2025-11-24 04:20:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Spam"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Click the link to provide bank details and pay a small processing fee",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_006",
@@ -56,8 +94,16 @@
     "subject": "Urgent: Production Issue - Login Failed",
     "body": "Hi Anush, We are seeing a spike in 500 errors on the login page. Clients are escalating. Please look into the logs immediately and update the status on the bridge call.",
     "timestamp": "2025-11-24 14:45:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Look into the logs of the login page",
+      "deadline": "Immediate"
+    },
+    "reply": "Dear Amit,\n\nI've been made aware of the production issue with the login page and I'm currently reviewing the logs to identify the root cause. I'll update the status on the bridge call as soon as I have more information. Can you please provide me with more details on the nature of the 500 errors and any recent changes made to the system? I'll work with the team to resolve this issue as quickly as possible.\n\nBest regards,\n[Your Name]"
   },
   {
     "id": "email_007",
@@ -66,8 +112,14 @@
     "subject": "Why is gold shining again?",
     "body": "In today's story, we discuss why central banks are hoarding gold and what it means for your portfolio. Plus, a quick look at the EV market slump.",
     "timestamp": "2025-11-24 08:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "None",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_008",
@@ -76,8 +128,15 @@
     "subject": "Mistake in DB...",
     "body": "Sir, I think I accidentally deleted the 'test_users' table, but now the main app is not working. Is 'prod_users' linked to it? Please help, I am scared.",
     "timestamp": "2025-11-24 16:10:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Restore or recreate the 'test_users' table",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_009",
@@ -86,8 +145,15 @@
     "subject": "Your Apple ID has been locked",
     "body": "We detected unusual activity on your account. Your ID will be deleted in 12 hours. Verify your identity here: http://apple-verify-secure.com/login. Do not ignore.",
     "timestamp": "2025-11-24 07:30:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Spam"
+    ],
+    "is_read": true,
+    "action_item": {
+      "task": "Verify your identity on the given link",
+      "deadline": "In 12 hours"
+    },
+    "reply": "Dear Apple Support,\n\nI think there may be some confusion. Apple's official support email address is support@apple.com, not @apple-id-lock.com. I'm not sure what's going on here, but I'm pretty certain my ID isn't going anywhere. If you'll excuse me, I have to go verify my identity... with myself. Please, for the love of all things digital, be real.\n\nBest regards,"
   },
   {
     "id": "email_010",
@@ -96,8 +162,14 @@
     "subject": "It's raining! Chai pakoda time?",
     "body": "The weather demands it. Hot tea and crispy pakoras delivered in 20 mins. Don't fight the feeling.",
     "timestamp": "2025-11-24 16:30:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Spam"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Order hot tea and crispy pakoras for delivery",
+      "deadline": "20 minutes"
+    }
   },
   {
     "id": "email_011",
@@ -106,8 +178,15 @@
     "subject": "Intimation u/s 143(1) for AY 2024-25",
     "body": "Your return for AY 2024-25 has been processed. There is no demand or refund due. Please check the attached intimation order for details.",
     "timestamp": "2025-11-24 11:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Check the attached intimation order for details",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_012",
@@ -116,8 +195,15 @@
     "subject": "PR Review - Backend API",
     "body": "Hey, I've pushed the changes for the new API endpoint. Can you review it? I've added comments this time, promise.",
     "timestamp": "2025-11-24 15:30:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Review new API endpoint",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_013",
@@ -126,8 +212,15 @@
     "subject": "Vincent Chase: Buy 1 Get 1 Free",
     "body": "Your eyes deserve the best. Grab the trendiest frames now. Gold membership available at Rs. 500.",
     "timestamp": "2025-11-24 12:45:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter",
+      "Spam"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Grab the trendiest frames now",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_014",
@@ -136,8 +229,15 @@
     "subject": "Urgent Task",
     "body": "I am in a meeting and cannot talk. I need you to purchase 5 Google Play gift cards for a client immediately. Send me the codes here. I will reimburse you.",
     "timestamp": "2025-11-24 09:45:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Purchase 5 Google Play gift cards for a client",
+      "deadline": "Immediately"
+    }
   },
   {
     "id": "email_015",
@@ -146,8 +246,15 @@
     "subject": "Q3 Project Roadmap Discussion",
     "body": "Dear Team, Please find attached the agenda for the Q3 roadmap discussion. We need to finalize the deliverables by Friday. Please come prepared with your estimates.",
     "timestamp": "2025-11-24 10:30:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Finalize Q3 roadmap deliverables",
+      "deadline": "Friday"
+    }
   },
   {
     "id": "email_016",
@@ -156,8 +263,15 @@
     "subject": "AWS Invoice Available",
     "body": "Your invoice for the billing period November 2025 is ready. Total amount: $12.45. The payment will be charged to your credit card on file.",
     "timestamp": "2025-11-24 05:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Review and verify the invoice",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_017",
@@ -166,8 +280,14 @@
     "subject": "New UI Assets",
     "body": "Hi, I've uploaded the new icons to Zeplin. I went with a 'minimalist yet bold' vibe. Let me know if the developers scream at the export settings.",
     "timestamp": "2025-11-24 14:15:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Review export settings for the new icons uploaded to Zeplin",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_018",
@@ -176,8 +296,15 @@
     "subject": "Pre-approved Personal Loan Offer",
     "body": "Dear Customer, You are eligible for a pre-approved personal loan of Rs. 3 Lakhs with minimal documentation. Click here to apply instantly.",
     "timestamp": "2025-11-24 11:45:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter",
+      "Spam"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Apply for the pre-approved personal loan",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_019",
@@ -186,8 +313,15 @@
     "subject": "Water Supply Disruption",
     "body": "Dear Residents, Water supply will be disrupted tomorrow from 10 AM to 2 PM due to tank cleaning. Please store water accordingly. Inconvenience is regretted.",
     "timestamp": "2025-11-24 08:30:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Store water accordingly",
+      "deadline": "Tomorrow, 10 AM"
+    }
   },
   {
     "id": "email_020",
@@ -196,8 +330,15 @@
     "subject": "30 new jobs match your profile",
     "body": "Senior Python Developer at Google, Data Scientist at Microsoft, and more. Apply early to be one of the first applicants.",
     "timestamp": "2025-11-24 09:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Newsletter",
+      "Spam"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Apply for the Senior Python Developer position at Google",
+      "deadline": "None"
+    }
   },
   {
     "id": "email_021",
@@ -206,7 +347,14 @@
     "subject": "Pick up cousin",
     "body": "Rohan is coming to the city today. His train reaches at 6 PM. Go pick him up. Don't be late.",
     "timestamp": "2025-11-24 12:00:00",
-    "tags": [],
-    "is_read": false
+    "tags": [
+      "Important",
+      "To-Do"
+    ],
+    "is_read": false,
+    "action_item": {
+      "task": "Pick up Rohan from the train station",
+      "deadline": "6 PM today"
+    }
   }
 ]
