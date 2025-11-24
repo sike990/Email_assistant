@@ -51,7 +51,7 @@
     "is_read": true,
     "action_item": {
       "error": "Failed to parse JSON",
-      "raw": "I cannot provide information that could be used for scamming. Is there something else I can help you with?"
+      "raw": "I cannot help you with this request. Is there something else I can help you with?"
     },
     "reply": "Dear Justin Jackson,\n\nThank you for your email, however, I would appreciate it if you could provide me with more information about your foundation and the purpose of the gift. Could you please provide an agenda or details about the meeting request?\n\nBest regards,\n[Your Name]"
   }

@@ -35,10 +35,13 @@ if "global_chat" not in st.session_state:
 if "compose_mode" not in st.session_state:
     st.session_state["compose_mode"] = False
 
+if "drafts" not in st.session_state:
+    st.session_state["drafts"] = load_payload("new_compose.json")
+
 # --- Sidebar Navigation ---
 with st.sidebar:
     st.title("📧 Email Assistant")
-    nav_selection = st.radio("Navigation", ["Inbox", "Global Agent", "Configuration"])
+    nav_selection = st.radio("Navigation", ["Inbox", "Global Agent", "Composed Mails", "Configuration"])
     
     st.divider()
     if nav_selection == "Inbox":
@@ -47,11 +50,11 @@ with st.sidebar:
                 progress_bar = st.progress(0)
                 for ind, email in enumerate(st.session_state["emails"]):
                     category_response = process_email(email['body'], st.session_state["prompts"]["categorization"])
-                action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
+                    action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
                     
-                st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
-                st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
-                progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
+                    st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
+                    st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
+                    progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
             save_data("mock_inbox.json", st.session_state["emails"])
             st.success("Processing Completed")
             time.sleep(1)
@@ -63,15 +66,17 @@ if nav_selection == "Configuration":
         category = st.text_area(label="Categorization", value=st.session_state["prompts"]["categorization"])
         action = st.text_area(label="Action", value=st.session_state["prompts"]["action_extraction"])
         reply = st.text_area(label="Auto-reply", value=st.session_state["prompts"]["auto_reply"])
-        submit = st.form_submit_button("Save Prompts")
+        button_container = st.container(horizontal=True)
+        with button_container:
+            col1,col2,col3,col4,col5 = st.columns([1,1,2,1,1])
+            with col3:
+                submit = st.form_submit_button("Save  Prompts",width="stretch")
         if submit:
             st.session_state["prompts"]["auto_reply"] = reply
             st.session_state["prompts"]["categorization"] = category
             st.session_state['prompts']["action_extraction"] = action
             save_data("prompts.json", st.session_state["prompts"])
             st.success("Saved Prompts")
-    
-
 
 # --- Main Content ---
 
@@ -82,7 +87,7 @@ if nav_selection == "Inbox":
     col_header, col_compose = st.columns([0.85, 0.15])
     with col_compose:
         if st.button("➕ Compose New"):
-            st.session_state["compose_mode"] = True
+            st.session_state["compose_mode"] = not st.session_state["compose_mode"]
 
     # Compose Modal/Area
     if st.session_state["compose_mode"]:
@@ -104,8 +109,16 @@ if nav_selection == "Inbox":
             
             if "new_draft_body" in st.session_state:
                 st.text_area("Generated Body:", value=st.session_state["new_draft_body"], height=200)
-                if st.button("Save to Drafts"): # Placeholder for saving logic
-                    st.success("Draft saved (simulated).")
+                if st.button("Save to Drafts"):
+                    new_draft = {
+                        "recipient": new_recipient,
+                        "subject": new_subject,
+                        "body": st.session_state["new_draft_body"],
+                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    st.session_state["drafts"].append(new_draft)
+                    save_data("new_compose.json", st.session_state["drafts"])
+                    st.success("Draft saved.")
                     st.session_state["compose_mode"] = False
                     del st.session_state["new_draft_body"]
                     st.rerun()
@@ -208,6 +221,19 @@ if nav_selection == "Inbox":
                     st.session_state["email_chats"][chat_key].append({"role": "assistant", "message": response})
         else:
             st.info("Select an email to view details.")
+
+elif nav_selection == "Composed Mails":
+    st.header("📂 Composed Mails")
+    if not st.session_state["drafts"]:
+        st.info("No drafts found.")
+    else:
+        for i, draft in enumerate(st.session_state["drafts"]):
+            with st.container(border=True):
+                st.subheader(f"To: {draft.get('recipient', 'Unknown')}")
+                st.caption(f"Subject: {draft.get('subject', 'No Subject')} | {draft.get('timestamp', '')}")
+                st.markdown(draft.get('body', ''))
+                # Placeholder for edit/send functionality if needed
+                # st.button("Edit", key=f"edit_draft_{i}") 
 
 elif nav_selection == "Global Agent":
     st.header("🌍 Global Inbox Agent")
