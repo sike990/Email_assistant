@@ -11,7 +11,7 @@
       "To-Do"
     ],
     "action_items": [],
-    "is_read": false,
+    "is_read": true,
     "action_item": [
       {
         "task": "Update APAR ID",
@@ -27,14 +27,14 @@
     "body": "Dear Anush Jain, Congratulation you have been shortlisted for the next round for OceanAI and you need to schedule the interview for the same, Reply the free slots for interview to this mail.",
     "timestamp": "2024-11-23 21:15:00",
     "tags": [
-      "Spam",
+      "###Spam",
       "To-Do"
     ],
     "action_items": [],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
-      "task": "Schedule the interview for OceanAI and reply with free slots",
-      "deadline": "No deadline mentioned"
+      "task": "Schedule the interview for OceanAI",
+      "deadline": "Not specified"
     }
   },
   {
@@ -48,10 +48,10 @@
       "Spam"
     ],
     "action_items": [],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "error": "Failed to parse JSON",
-      "raw": "I cannot provide information on how to access or claim a gift card that may be a scam. If you suspect that this is a scam, would you like me to provide you with information on how to identify a scam?"
+      "raw": "I cannot assist in the extraction of potential scam tasks. Is there something else I can help you with?"
     }
   }
 ]
