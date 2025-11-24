@@ -1,284 +1,228 @@
-from services.data_manager import load_payload,save_data
+from services.data_manager import load_payload, save_data
 import streamlit as st 
 import json
-from services.llm_services import process_email
-from services.utils import parse_json_output,parse_list_output
+from services.llm_services import process_email, process_global_query, generate_draft
+from services.utils import parse_json_output, parse_list_output
 import time
 
-def format_email(email:dict)->str:
+# --- Helper Functions ---
+def format_email(email: dict) -> str:
     """Extracts relevant details from email and returns string"""
-    return f"Sender's_name : {email["name"] }/n Sender's email : {email["sender"]} /n Recieved at : {email["timestamp"]} /n Subject : {email["body"]} /n Body : {email["body"]}"
+    return f"Sender's_name : {email['name']}\nSender's email : {email['sender']}\nRecieved at : {email['timestamp']}\nSubject : {email['subject']}\nBody : {email['body']}"
 
-def select_email(email:dict)->None:
+def select_email(email: dict) -> None:
     st.session_state['selected_email'] = email
-st.set_page_config(layout="wide")
-st.title("📧 Email Assistant")
-with st.container(height=500):
-    if "emails" not in st.session_state:
-        emails = load_payload("mock_inbox.json")
-        st.session_state["emails"] = emails
 
-    if "prompts" not in st.session_state:
-        prompts = load_payload("prompts.json")
-        st.session_state["prompts"] = prompts
+# --- Page Config ---
+st.set_page_config(layout="wide", page_title="Email Assistant")
 
-    if "selected_email" not in st.session_state:
-        st.session_state["selected_email"] = None# will contain dictionary of mails
-    left_col,right_col = st.columns([0.5,0.5])
+# --- Session State Initialization ---
+if "emails" not in st.session_state:
+    st.session_state["emails"] = load_payload("mock_inbox.json")
 
-    if "email_chats" not in st.session_state:
-        st.session_state["email_chats"] = {}
-    # action = st.sidebar.text_area(label="Action" , value = st.session_state["prompts"]["action_extraction"])
-    # action_button =  st.sidebar.button("Save Prompt")
-    # if action_button and action:
-    #     st.session_state['prompts']["action_extraction"] = action
-    #     file = st.session_state["prompts"]
-    #     save_data("prompts.json",file)
-    # elif action_button and not action:
-    #     st.write("Please provide some text to submit.")
+if "prompts" not in st.session_state:
+    st.session_state["prompts"] = load_payload("prompts.json")
 
-    # category = st.sidebar.text_area(label="Categorization" , value = st.session_state["prompts"]["categorization"])
-    # category_button =  st.sidebar.button("Save Prompt")
-    # if category_button and category:
-    #     st.session_state["prompts"]["categorization"] = category
-    #     file = st.session_state["prompts"]
-    #     save_data("prompts.json",file)
-    # elif category_button and not category:
-    #     st.write("Please provide some text to submit.")
+if "selected_email" not in st.session_state:
+    st.session_state["selected_email"] = None
 
-    # reply = st.sidebar.text_area(label="Auto-reply" , value = st.session_state["prompts"]["auto_reply"])
-    # reply_button =  st.sidebar.button("Save Prompt")
-    # if reply_button and reply:
-    #     st.session_state["prompts"]["auto_reply"] = reply
-    #     file = st.session_state["prompts"]
-    #     save_data("prompts.json",file)
-    # elif reply_button and not reply:
-    #     st.write("Please provide some text to submit.")
+if "email_chats" not in st.session_state:
+    st.session_state["email_chats"] = {}
 
+if "global_chat" not in st.session_state:
+    st.session_state["global_chat"] = []
 
-    st.sidebar.header("⚙️ Prompt configration")
+if "compose_mode" not in st.session_state:
+    st.session_state["compose_mode"] = False
 
-    with st.sidebar.form(key="prompt_form"):
-        category = st.text_area(label="Categorization" , value = st.session_state["prompts"]["categorization"])
-        action = st.text_area(label="Action" , value = st.session_state["prompts"]["action_extraction"])
-        reply = st.text_area(label="Auto-reply" , value = st.session_state["prompts"]["auto_reply"])
-
-        submit = st.form_submit_button("Save Prompt")
-
-        if submit:
-            st.session_state["prompts"]["auto_reply"] = reply
-            st.session_state["prompts"]["categorization"] = category
-            st.session_state['prompts']["action_extraction"] = action
-            file = st.session_state["prompts"]
-            save_data("prompts.json",file)
-            st.success("Saved Prompt")
-            time.sleep(3)
-    process_email_button = st.sidebar.button("Process Emails")
-
-
-    # with left_col:
-    #     st.header("Inbox")
-    #     for email in st.session_state["emails"]:
-    #         selected = (st.session_state["selected_email"] and st.session_state["selected_email"]["id"] == email["id"])
-    #         expander = st.expander(f"**{email["name"]}** - {email['subject']}")
-    #         expander.caption(f"Timestamp : {email["timestamp"]}")
-    #         expander.write(f"**Tag** : {email['tags']}")
-    #         expander.write("---")
-    #         expander.write(email['body'])
-    #         expander.button("Chat with this email" ,type = "primary" if selected else "secondary", on_click = select_email , args = (email,) , key = f"{email['id']}")
-
-
-    #     process_email_button = st.button("Process Emails")
-
-    #     if process_email_button:
-
-    #         with st.spinner("Processing..."):
-    #             progress_bar = st.progress(0)
-    #             for ind,email in enumerate(st.session_state["emails"]):
+# --- Sidebar Navigation ---
+with st.sidebar:
+    st.title("📧 Email Assistant")
+    nav_selection = st.radio("Navigation", ["Inbox", "Global Agent", "Configuration"])
+    
+    st.divider()
+    
+    if nav_selection == "Configuration":
+        st.header("⚙️ Configuration")
+        with st.form(key="prompt_form"):
+            category = st.text_area(label="Categorization", value=st.session_state["prompts"]["categorization"])
+            action = st.text_area(label="Action", value=st.session_state["prompts"]["action_extraction"])
+            reply = st.text_area(label="Auto-reply", value=st.session_state["prompts"]["auto_reply"])
+            submit = st.form_submit_button("Save Prompts")
+            if submit:
+                st.session_state["prompts"]["auto_reply"] = reply
+                st.session_state["prompts"]["categorization"] = category
+                st.session_state['prompts']["action_extraction"] = action
+                save_data("prompts.json", st.session_state["prompts"])
+                st.success("Saved Prompts")
+    
+    elif nav_selection == "Inbox":
+        if st.button("Process Emails", type="primary"):
+            with st.spinner("Processing..."):
+                progress_bar = st.progress(0)
+                for ind, email in enumerate(st.session_state["emails"]):
+                    category_response = process_email(email['body'], st.session_state["prompts"]["categorization"])
+                    action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
                     
-    #                 # st.write(f"Processing email {email['id']}")
-    #                 category_response = process_email(email['body'] , st.session_state["prompts"]["categorization"])
-    #                 action_response = process_email(email['body'] , st.session_state['prompts']['action_extraction'])
-                    
-    #                 st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
-    #                 st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
-    #                 progress_bar.progress((ind+1)/len(st.session_state["emails"]))
-    #             save_data("mock_inbox.json" , st.session_state["emails"])
-    #             st.success("Process Completed")
-    #             time.sleep(1)
-    #             st.rerun()
+                    st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
+                    st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
+                    progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
+                save_data("mock_inbox.json", st.session_state["emails"])
+                st.success("Processing Completed")
+                time.sleep(1)
+                st.rerun()
 
-    # with col2:
-    #     refresh = st.button("Refresh Selection")
+# --- Main Content ---
 
-    #     for expands in expanders:
-    #         if expands['expander'].expanded:
-    #             st.session_state["selected"].append(expands['email_id'])
-    #             st.write(f"This email is open {expands['email_id']}")
-    #         elif expands['id'] in st.session_state["selected"]:
-    #             st.session_state["selected"].remove(expands['id'])
+if nav_selection == "Inbox":
+    st.header("Inbox")
+    
+    # Compose Button (Top Right of Inbox Container)
+    col_header, col_compose = st.columns([0.85, 0.15])
+    with col_compose:
+        if st.button("➕ Compose New"):
+            st.session_state["compose_mode"] = True
 
-    # with right_col:
-    #     if st.session_state["selected_email"]:
-    #         if st.session_state["selected_email"]["id"] not in st.session_state["email_chats"]:
-    #             st.session_state["email_chats"][st.session_state["selected_email"]["id"]] = []
+    # Compose Modal/Area
+    if st.session_state["compose_mode"]:
+        with st.container(border=True):
+            st.subheader("New Email Draft")
+            new_recipient = st.text_input("To:")
+            new_subject = st.text_input("Subject:")
+            new_prompt = st.text_area("Instructions for AI (e.g., 'Ask for a meeting next Tuesday'):")
             
-    #         for chat in st.session_state["email_chats"][st.session_state["selected_email"]["id"]]:
-    #             with st.chat_message(chat["role"]):
-    #                 st.markdown(chat["message"])
+            c1, c2 = st.columns([0.2, 0.8])
+            with c1:
+                if st.button("Generate Draft"):
+                    if new_recipient and new_subject and new_prompt:
+                        with st.spinner("Drafting..."):
+                            draft_body = generate_draft(new_prompt, new_recipient, new_subject)
+                            st.session_state["new_draft_body"] = draft_body
+                    else:
+                        st.warning("Please fill in all fields.")
             
-    #         if prompt:=st.chat_input("Say something"):
-    #             with st.chat_message("user"):
-    #                 st.markdown(prompt)
-    #             st.session_state["email_chats"][st.session_state["selected_email"]["id"]].append({"role":"user","message":prompt})
-
-    #             with st.chat_message("assistant"):
-    #                 email = st.session_state["selected_email"]
-    #                 llm_response = process_email(format_email(email),prompt)
-    #                 st.markdown(llm_response)
-    #             st.session_state["email_chats"][st.session_state["selected_email"]["id"]].append({"role":"assistant","message":llm_response})
-    #     else:
-    #         st.info("Select an email to start chatting.")
-            
-
-    # --- Helper Function for LLM Context ---
-    def format_email_context(email):
-        return f"""
-        From: {email['sender']} ({email['name']})
-        Date: {email['timestamp']}
-        Subject: {email['subject']}
-        
-        Body:
-        {email['body']}
-        """
-
-
-
-        
-
-    with left_col:
-        st.header("Inbox")
-        with st.container(height=500):
-            for email in st.session_state["emails"]:
-                selected = (st.session_state["selected_email"] and st.session_state["selected_email"]['id'] == email['id'])
-                if selected:
-                    email['is_read'] = True
-                    save_data("mock_inbox.json",st.session_state["emails"])
-                with st.container(border=True,width="stretch"):
-                    col1,col2 = st.columns([0.7,0.3])
-                    with col1:
-                        if not email['is_read']:
-                            st.write(f"**{email["name"]}** : {email["subject"]}")
-                            if email["tags"]:
-                                st.text(f"🏷️ {", ".join(email["tags"])}")
-                        else:
-                            st.caption(f"**{email["name"]}** : {email["subject"]}")
-                            if email["tags"]:
-                                st.caption(f"🏷️ {", ".join(email["tags"])}")
-                        
-                    with col2:
-                        flex = st.container(horizontal_alignment="right")
-                        flex.button("Open" , on_click = select_email , args=(email,) , type = "primary" if selected else "secondary" , key=f"{email["id"]}" , width="content")
-            
-
-            if process_email_button:
-
-                with st.spinner("Processing..."):
-                    progress_bar = st.progress(0)
-                    for ind,email in enumerate(st.session_state["emails"]):
-                        
-                            # st.write(f"Processing email {email['id']}")
-                        category_response = process_email(email['body'] , st.session_state["prompts"]["categorization"])
-                        action_response = process_email(email['body'] , st.session_state['prompts']['action_extraction'])
-                            
-                        st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
-                        st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
-                        progress_bar.progress((ind+1)/len(st.session_state["emails"]))
-                    save_data("mock_inbox.json" , st.session_state["emails"])
-                    st.success("Process Completed")
-                    time.sleep(1)
+            if "new_draft_body" in st.session_state:
+                st.text_area("Generated Body:", value=st.session_state["new_draft_body"], height=200)
+                if st.button("Save to Drafts"): # Placeholder for saving logic
+                    st.success("Draft saved (simulated).")
+                    st.session_state["compose_mode"] = False
+                    del st.session_state["new_draft_body"]
                     st.rerun()
+            
+            if st.button("Cancel"):
+                st.session_state["compose_mode"] = False
+                if "new_draft_body" in st.session_state:
+                    del st.session_state["new_draft_body"]
+                st.rerun()
+
+    # Inbox Layout
+    left_col, right_col = st.columns([0.4, 0.6])
+    
+    with left_col:
+        with st.container(height=600):
+            for email in st.session_state["emails"]:
+                is_selected = (st.session_state["selected_email"] and st.session_state["selected_email"]['id'] == email['id'])
+                
+                # Mark as read if selected
+                if is_selected and not email.get('is_read'):
+                    email['is_read'] = True
+                    save_data("mock_inbox.json", st.session_state["emails"])
+
+                # Email Card Style
+                card_border = True
+                if is_selected:
+                    card_border = True # Can add specific style if needed
+                
+                with st.container(border=card_border):
+                    c1, c2 = st.columns([0.8, 0.2])
+                    with c1:
+                        sender_style = "**" if not email.get('is_read') else ""
+                        st.markdown(f"{sender_style}{email['name']}{sender_style}")
+                        st.caption(email['subject'])
+                        if email.get("tags"):
+                            st.caption(f"🏷️ {', '.join(email['tags'])}")
+                    with c2:
+                        if st.button("Open", key=f"open_{email['id']}", type="primary" if is_selected else "secondary"):
+                            select_email(email)
+                            st.rerun()
 
     with right_col:
-        st.space(59)
-        with st.container(height=500):
-            if st.session_state["selected_email"]:
+        if st.session_state["selected_email"]:
+            email = st.session_state["selected_email"]
+            with st.container(height=600, border=True):
+                st.subheader(email["subject"])
+                st.caption(f"From: {email['name']} <{email['sender']}> | {email['timestamp']}")
+                st.divider()
+                st.markdown(email["body"])
                 
-                with st.container(border = True):
-                    email = st.session_state["selected_email"]
-                    st.header(f"{email["subject"]}")
-                    st.caption(f"From: {email["name"]}\<{email["sender"]}\>")
-                    st.caption(st.session_state["selected_email"]["timestamp"])
+                # Action Items
+                action_items = email.get("action_item")
+                if action_items and "error" not in action_items:
                     st.divider()
-                    with st.container(height=200,border=None):
-                        st.markdown(st.session_state['selected_email']["body"])
-                    # ... inside the Right Column, after st.write(selected_email["body"]) ...
+                    st.subheader("⚡ Action Items")
+                    task = action_items.get("task", "Unknown Task")
+                    deadline = action_items.get("deadline", "No Deadline")
+                    st.info(f"**Task:** {task}\n\n**Due:** {deadline}")
 
+                st.divider()
+                
+                # Reply Section
+                st.subheader("Reply Agent")
+                if st.button("Generate Reply"):
+                    with st.spinner("Generating..."):
+                        reply_draft = process_email(format_email(email), st.session_state["prompts"]["auto_reply"])
+                        email['reply'] = reply_draft
+                        save_data("mock_inbox.json", st.session_state["emails"])
+                        st.rerun()
+                
+                if email.get("reply"):
+                    with st.expander("Draft Reply", expanded=True):
+                        edited_reply = st.text_area("Edit Reply", value=email["reply"], height=150)
+                        if st.button("Save Draft"):
+                            email["reply"] = edited_reply
+                            save_data("mock_inbox.json", st.session_state["emails"])
+                            st.success("Draft saved.")
+
+                st.divider()
+                
+                # Chat with Email
+                st.subheader("Chat with this Email")
+                chat_key = email["id"]
+                if chat_key not in st.session_state["email_chats"]:
+                    st.session_state["email_chats"][chat_key] = []
+                
+                for msg in st.session_state["email_chats"][chat_key]:
+                    with st.chat_message(msg["role"]):
+                        st.markdown(msg["message"])
+                
+                if prompt := st.chat_input("Ask about this email..."):
+                    st.session_state["email_chats"][chat_key].append({"role": "user", "message": prompt})
+                    with st.chat_message("user"):
+                        st.markdown(prompt)
                     
+                    with st.chat_message("assistant"):
+                        with st.spinner("Thinking..."):
+                            response = process_email(format_email(email), prompt)
+                            st.markdown(response)
+                    st.session_state["email_chats"][chat_key].append({"role": "assistant", "message": response})
+        else:
+            st.info("Select an email to view details.")
 
-                    # --- ACTION ITEMS SECTION ---
-                    action_items = email.get("action_item")
-                    if action_items and "error" not in action_items:
-                        #st.warning(type(email["action_item"]))
-                        st.divider()
-                        st.subheader("⚡ Action Items & Deadlines")
-                        
-                            # Handle cases where LLM returns a list of strings vs list of dicts
-                            # (Your prompt asked for JSON {task, deadline}, so it should be a dict)
-                            #if isinstance(item, dict):
-                        item = email["action_item"]
-                        task = item.get("task", "Unknown Task")
-                        deadline = item.get("deadline", "No Deadline")
-                        st.info(f"📌 **:red[Task] :**  {task} \n\n 🕒 **:red[Due] :**  {deadline}")
-                            #else:
-                                # Fallback if parsing wasn't perfect
-                            #st.warning(f"🔸 {item}")
-                        st.divider()
-                    
-                    # ... Now start the Chat Agent ...
-                    #Generate Reply section
-                    if st.button("Generate reply"):
-                        if "reply" not in email:
-                            email['reply'] = None
-                        llm_reply = process_email(format_email(email),st.session_state["prompts"]["auto_reply"])
-                        email['reply'] = llm_reply
-                        
-                        
-                    if "reply" in email:
-                        with st.expander("Generated Reply(*Draft*)"):
-                            final_draft = st.text_area(label="",value=email["reply"])
-                            #st.text_area(label="Label",value="ANush\nJain")
-                            col1,col2 = st.columns([0.5,0.5])
-                            with col1:
-                                if st.button("Save"):
-                                    email["reply"] = final_draft
-                                    save_data("mock_inbox.json",st.session_state["emails"])
-                                    st.success("Saved Draft")
-                                    time.sleep(2)
-                                    st.rerun()
-                                    
-                            with col2:
-                                flex=st.container(horizontal_alignment="right")
-                                flex.button("Send")
-                        
-                    st.divider()
-                    st.header("Email Agent")
-                    if st.session_state["selected_email"]["id"] not in st.session_state["email_chats"]:
-                        st.session_state["email_chats"][st.session_state["selected_email"]["id"]] = []
-                    messages = st.container()
-                    for chat in st.session_state["email_chats"][st.session_state["selected_email"]["id"]]:
-                        with messages.chat_message(chat["role"]):
-                            st.markdown(chat["message"])
-                        
-                    if prompt:=messages.chat_input("Say something"):
-                        with messages.chat_message("user"):
-                                st.markdown(prompt)
-                        st.session_state["email_chats"][st.session_state["selected_email"]["id"]].append({"role":"user","message":prompt})
-
-                        with messages.chat_message("assistant"):
-                            email = st.session_state["selected_email"]
-                            llm_response = process_email(format_email(email),prompt)
-                            st.markdown(llm_response)
-                        st.session_state["email_chats"][st.session_state["selected_email"]["id"]].append({"role":"assistant","message":llm_response})
-            else:
-                st.info("Select an email to start chatting.")
+elif nav_selection == "Global Agent":
+    st.header("🌍 Global Inbox Agent")
+    st.markdown("Ask questions about your entire inbox (e.g., 'What are my most urgent tasks?', 'Summarize unread emails').")
+    
+    for msg in st.session_state["global_chat"]:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["message"])
+            
+    if prompt := st.chat_input("Ask Global Agent..."):
+        st.session_state["global_chat"].append({"role": "user", "message": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        
+        with st.chat_message("assistant"):
+            with st.spinner("Analyzing Inbox..."):
+                response = process_global_query(st.session_state["emails"], prompt)
+                st.markdown(response)
+        st.session_state["global_chat"].append({"role": "assistant", "message": response})
