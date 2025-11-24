@@ -21,7 +21,7 @@ def get_llm_response(prompt:str = "Why do we fall?[A Philosopy question]" , temp
 
 
 
-def process_email(email_body:str , instruction_text:str , temperature:float = 0.7):
+def process_email(email_body:str , instruction_text:str , temperature:float = 1.0):
     """Returns llm response for prompts"""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
@@ -39,7 +39,7 @@ def process_email(email_body:str , instruction_text:str , temperature:float = 0.
     response = email_model.invoke(input = {"email_body" : email_body , "instruction_text" : instruction_text})
     return response.content 
 
-def process_global_query(emails: list, query: str, temperature: float = 0.7) -> str:
+def process_global_query(emails: list, query: str, temperature: float = 1) -> str:
     """Processes a query against the entire inbox context."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
@@ -74,7 +74,7 @@ def process_global_query(emails: list, query: str, temperature: float = 0.7) -> 
     response = chain.invoke(input={"inbox_context": inbox_context, "query": query})
     return response.content
 
-def generate_draft(prompt: str, recipient: str, subject: str, temperature: float = 0.7) -> str:
+def generate_draft(prompt: str, recipient:str, recipient_email: str, subject: str, temperature: float = 1.0) -> str:
     """Generates a new email draft based on a prompt."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
@@ -88,8 +88,8 @@ def generate_draft(prompt: str, recipient: str, subject: str, temperature: float
     
     prompt_template = PromptTemplate.from_template(
         """You are an intelligent email assistant. Draft a professional email based on the following details:
-        
-        Recipient: {recipient}
+        Recipient Name(Optional): {recipient}
+        Recipient email: {recipient_email}
         Subject: {subject}
         
         Instructions/Context:
@@ -100,6 +100,6 @@ def generate_draft(prompt: str, recipient: str, subject: str, temperature: float
     )
     
     chain = prompt_template | llm
-    response = chain.invoke(input={"recipient": recipient, "subject": subject, "prompt": prompt})
+    response = chain.invoke(input={"recipient": recipient,"recipient_email": recipient_email, "subject": subject, "prompt": prompt})
     return response.content
 

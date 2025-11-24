@@ -69,7 +69,7 @@
       "task": "None",
       "deadline": "None"
     },
-    "reply": "Dear Zomato Team,\n\nI'm flattered by the personalized attention, but I'm not quite ready to surrender to the allure of discounted Biryani just yet. Maybe you could work on perfecting your algorithms to understand the nuances of human hunger (and dating lives).\n\nBest regards,\n[Your Name]"
+    "reply": "Dear Zomato Team,\n\nThanks for the offer, but I think my stomach is doing just fine without a prompt to order Biryani. I appreciate the discount, but I'll pass on this one. Please remove me from your newsletter list if you could.\n\nBest regards,\n[Your Name]"
   },
   {
     "id": "email_005",
@@ -85,7 +85,8 @@
     "action_item": {
       "task": "Click the link to provide bank details and pay a small processing fee",
       "deadline": "None"
-    }
+    },
+    "reply": "Dear Dr. Mbogo,\n\nI'm not sure which dictionary you're using, but I think you may be confusing me with someone who uses the internet to find lost treasure. I'm afraid clicking on suspicious links and providing bank details isn't exactly how inheritance claims work.\n\nAs a friendly reminder, if I actually had an inheritance claim, I'd be getting a phone call from a lawyer, not an email from a mysterious executor with a broken link.\n\nThanks for the laugh, though.\n\nBest regards,"
   },
   {
     "id": "email_006",
@@ -103,7 +104,7 @@
       "task": "Look into the logs of the login page",
       "deadline": "Immediate"
     },
-    "reply": "Dear Amit,\n\nI've been made aware of the production issue with the login page and I'm currently reviewing the logs to identify the root cause. I'll update the status on the bridge call as soon as I have more information. Can you please provide me with more details on the nature of the 500 errors and any recent changes made to the system? I'll work with the team to resolve this issue as quickly as possible.\n\nBest regards,\n[Your Name]"
+    "reply": "Dear Amit,\n\nThank you for bringing this urgent matter to my attention. I understand the severity of the issue and will immediately investigate the logs to identify the cause of the 500 errors on the login page. I will also update the status on the bridge call.\n\nRegarding the next steps, I will work closely with the development team to resolve the issue as soon as possible. I will keep you informed of my progress and will provide a detailed update on the root cause and the plan to prevent similar issues in the future.\n\nPlease let me know if you need any further information from me in the meantime. I will prioritize this task and ensure that it is resolved at the earliest.\n\nBest regards,\nAnush"
   },
   {
     "id": "email_007",
@@ -115,7 +116,7 @@
     "tags": [
       "Newsletter"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "None",
       "deadline": "None"
@@ -165,7 +166,7 @@
     "tags": [
       "Spam"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Order hot tea and crispy pakoras for delivery",
       "deadline": "20 minutes"
@@ -182,11 +183,12 @@
       "Important",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Check the attached intimation order for details",
       "deadline": "None"
-    }
+    },
+    "reply": "Dear Income Tax Department,\n\nThank you for the prompt update on the status of my AY 2024-25 return. I appreciate your efforts in processing my return, and I'm relieved to hear that there is no demand or refund due.\n\nI will review the attached intimation order as soon as possible. If I have any questions or concerns, I will be in touch with your department.\n\nThank you for your time and assistance.\n\nBest regards,"
   },
   {
     "id": "email_012",
@@ -216,7 +218,7 @@
       "Newsletter",
       "Spam"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Grab the trendiest frames now",
       "deadline": "None"
@@ -233,7 +235,7 @@
       "Important",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Purchase 5 Google Play gift cards for a client",
       "deadline": "Immediately"
@@ -250,7 +252,7 @@
       "Important",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Finalize Q3 roadmap deliverables",
       "deadline": "Friday"
@@ -267,7 +269,7 @@
       "Newsletter",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Review and verify the invoice",
       "deadline": "None"
@@ -300,7 +302,7 @@
       "Newsletter",
       "Spam"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Apply for the pre-approved personal loan",
       "deadline": "None"
@@ -317,11 +319,12 @@
       "Important",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Store water accordingly",
       "deadline": "Tomorrow, 10 AM"
-    }
+    },
+    "reply": "Dear Residents,\n\nThank you for the advance notice regarding the water supply disruption. I appreciate your efforts in informing us of the scheduled tank cleaning. Please be assured that we will make necessary arrangements to store sufficient water for our needs during the disruption.\n\nIf you have any further questions or concerns, please do not hesitate to reach out to the administration. We will do our best to minimize the inconvenience caused.\n\nThank you for your understanding and cooperation.\n\nBest regards,\n[Your Name]"
   },
   {
     "id": "email_020",
@@ -334,11 +337,12 @@
       "Newsletter",
       "Spam"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Apply for the Senior Python Developer position at Google",
       "deadline": "None"
-    }
+    },
+    "reply": "I've received your email listing various job opportunities, including the Senior Python Developer position at Google and the Data Scientist position at Microsoft. However, I'm afraid you've reached the right person, but the wrong inbox. As a senior developer, I don't think I need to be reminded about applying early for these roles - my skills are already sought after by the top tech giants. Thanks for the laugh, though!"
   },
   {
     "id": "email_021",
@@ -351,10 +355,11 @@
       "Important",
       "To-Do"
     ],
-    "is_read": false,
+    "is_read": true,
     "action_item": {
       "task": "Pick up Rohan from the train station",
       "deadline": "6 PM today"
-    }
+    },
+    "reply": "Dear Mom, \n\nI've got the train schedule marked, and I'll make sure to pick Rohan up from the station on time. I'll see you both soon. Take care.\n\nBest, [Your Name]"
   }
 ]
