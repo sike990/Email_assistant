@@ -41,36 +41,37 @@ with st.sidebar:
     nav_selection = st.radio("Navigation", ["Inbox", "Global Agent", "Configuration"])
     
     st.divider()
-    
-    if nav_selection == "Configuration":
-        st.header("⚙️ Configuration")
-        with st.form(key="prompt_form"):
-            category = st.text_area(label="Categorization", value=st.session_state["prompts"]["categorization"])
-            action = st.text_area(label="Action", value=st.session_state["prompts"]["action_extraction"])
-            reply = st.text_area(label="Auto-reply", value=st.session_state["prompts"]["auto_reply"])
-            submit = st.form_submit_button("Save Prompts")
-            if submit:
-                st.session_state["prompts"]["auto_reply"] = reply
-                st.session_state["prompts"]["categorization"] = category
-                st.session_state['prompts']["action_extraction"] = action
-                save_data("prompts.json", st.session_state["prompts"])
-                st.success("Saved Prompts")
-    
-    elif nav_selection == "Inbox":
+    if nav_selection == "Inbox":
         if st.button("Process Emails", type="primary"):
             with st.spinner("Processing..."):
                 progress_bar = st.progress(0)
                 for ind, email in enumerate(st.session_state["emails"]):
                     category_response = process_email(email['body'], st.session_state["prompts"]["categorization"])
-                    action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
+                action_response = process_email(email['body'], st.session_state['prompts']['action_extraction'])
                     
-                    st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
-                    st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
-                    progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
-                save_data("mock_inbox.json", st.session_state["emails"])
-                st.success("Processing Completed")
-                time.sleep(1)
-                st.rerun()
+                st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
+                st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
+                progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
+            save_data("mock_inbox.json", st.session_state["emails"])
+            st.success("Processing Completed")
+            time.sleep(1)
+            st.rerun()
+
+if nav_selection == "Configuration":
+    st.header("⚙️ Configuration")
+    with st.form(key="prompt_form"):
+        category = st.text_area(label="Categorization", value=st.session_state["prompts"]["categorization"])
+        action = st.text_area(label="Action", value=st.session_state["prompts"]["action_extraction"])
+        reply = st.text_area(label="Auto-reply", value=st.session_state["prompts"]["auto_reply"])
+        submit = st.form_submit_button("Save Prompts")
+        if submit:
+            st.session_state["prompts"]["auto_reply"] = reply
+            st.session_state["prompts"]["categorization"] = category
+            st.session_state['prompts']["action_extraction"] = action
+            save_data("prompts.json", st.session_state["prompts"])
+            st.success("Saved Prompts")
+    
+
 
 # --- Main Content ---
 
