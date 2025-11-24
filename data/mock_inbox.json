@@ -12,12 +12,11 @@
     ],
     "action_items": [],
     "is_read": true,
-    "action_item": [
-      {
-        "task": "Update APAR ID",
-        "deadline": "End of this month"
-      }
-    ]
+    "action_item": {
+      "task": "Update APAR ID",
+      "deadline": "End of this month"
+    },
+    "reply": "Dear Rahul Dua,\nThank you for reaching out, but I'm not aware of any APAR ID that requires updating.\nBest regards,\n[Your Name]"
   },
   {
     "id": "email_002",
@@ -27,15 +26,16 @@
     "body": "Dear Anush Jain, Congratulation you have been shortlisted for the next round for OceanAI and you need to schedule the interview for the same, Reply the free slots for interview to this mail.",
     "timestamp": "2024-11-23 21:15:00",
     "tags": [
-      "###Spam",
+      "Spam",
       "To-Do"
     ],
     "action_items": [],
     "is_read": true,
     "action_item": {
-      "task": "Schedule the interview for OceanAI",
-      "deadline": "Not specified"
-    }
+      "task": "Schedule interview for OceanAI",
+      "deadline": "Not specified (implied urgency to respond)"
+    },
+    "reply": "Dear OceanAI Talent recruit,\n\nI appreciate your email regarding the shortlisting for the next round at OceanAI. To better prepare for the interview, could you please provide me with an agenda or a detailed outline of what to expect during the process? \n\nBest regards,\nAnush Jain"
   },
   {
     "id": "email_003",
@@ -51,7 +51,8 @@
     "is_read": true,
     "action_item": {
       "error": "Failed to parse JSON",
-      "raw": "I cannot assist in the extraction of potential scam tasks. Is there something else I can help you with?"
-    }
+      "raw": "I cannot provide information that could be used for scamming. Is there something else I can help you with?"
+    },
+    "reply": "Dear Justin Jackson,\n\nThank you for your email, however, I would appreciate it if you could provide me with more information about your foundation and the purpose of the gift. Could you please provide an agenda or details about the meeting request?\n\nBest regards,\n[Your Name]"
   }
 ]

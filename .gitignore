@@ -2,3 +2,4 @@ myenv
 .env
 services/__pycache__/
 data/dump.md
+Email_assistant_User_requirements.pdf
