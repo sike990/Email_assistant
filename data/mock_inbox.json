@@ -1,58 +1,212 @@
 [
   {
     "id": "email_001",
-    "sender": "rahuldua@gmail.com",
-    "name": "Rahul Dua",
-    "subject": "APAR ID Update",
-    "body": "Dear user, Please update your APAR ID by end of this month. To avoid any inconvinience",
-    "timestamp": "2024-11-23 20:45:32",
-    "tags": [
-      "Important",
-      "To-Do"
-    ],
-    "action_items": [],
-    "is_read": true,
-    "action_item": {
-      "task": "Update APAR ID",
-      "deadline": "End of this month"
-    },
-    "reply": "Dear Rahul Dua,\nThank you for reaching out, but I'm not aware of any APAR ID that requires updating.\nBest regards,\n[Your Name]"
+    "sender": "alerts@hdfcbank.net",
+    "name": "HDFC Bank Alerts",
+    "subject": "IMPORTANT: KYC Update Required Immediately",
+    "body": "Dear Customer, Your KYC details are pending update. As per RBI guidelines, your account will be frozen if not updated within 24 hours. Please visit your nearest branch or log in to netbanking to submit the required documents. Regards, HDFC Bank.",
+    "timestamp": "2025-11-24 09:15:00",
+    "tags": [],
+    "is_read": false
   },
   {
     "id": "email_002",
-    "sender": "oceanai@gmail.com",
-    "name": "OceanAI Talent recruit",
-    "subject": "Interview Schedule",
-    "body": "Dear Anush Jain, Congratulation you have been shortlisted for the next round for OceanAI and you need to schedule the interview for the same, Reply the free slots for interview to this mail.",
-    "timestamp": "2024-11-23 21:15:00",
-    "tags": [
-      "Spam",
-      "To-Do"
-    ],
-    "action_items": [],
-    "is_read": true,
-    "action_item": {
-      "task": "Schedule interview for OceanAI",
-      "deadline": "Not specified (implied urgency to respond)"
-    },
-    "reply": "Dear OceanAI Talent recruit,\n\nI appreciate your email regarding the shortlisting for the next round at OceanAI. To better prepare for the interview, could you please provide me with an agenda or a detailed outline of what to expect during the process? \n\nBest regards,\nAnush Jain"
+    "sender": "hr@oceanai.mariapps.com",
+    "name": "OceanAI (MariApps Marine Solutions)",
+    "subject": "Selection Update - Next Round",
+    "body": "Dear Anush Jain,\n\nWe are pleased to inform you that you have been shortlisted for the next round of our selection process at OceanAI (MariApps Marine Solutions Private Limited).\n\nYour performance in the previous round was impressive. We will be sharing the details regarding the schedule and format of the next round shortly.\n\nCongratulations and best of luck!\n\nWarm regards,\nHR Team\nOceanAI",
+    "timestamp": "2025-11-24 10:05:00",
+    "tags": [],
+    "is_read": false
   },
   {
     "id": "email_003",
-    "sender": "justingifts@gmail.com",
-    "name": "Justin Jackson",
-    "subject": "Free 500$ gift card",
-    "body": "Dear Anush Jain, Congatulation you have been selected by our foundation to recieve 500$ in your bank account to claim this you have to share your bank details to this email kindly click the link http://giftcard.com attached before it get expire.",
-    "timestamp": "2024-11-23 22:00:00",
-    "tags": [
-      "Spam"
-    ],
-    "action_items": [],
-    "is_read": true,
-    "action_item": {
-      "error": "Failed to parse JSON",
-      "raw": "I cannot help you with this request. Is there something else I can help you with?"
-    },
-    "reply": "Dear Justin Jackson,\n\nThank you for your email, however, I would appreciate it if you could provide me with more information about your foundation and the purpose of the gift. Could you please provide an agenda or details about the meeting request?\n\nBest regards,\n[Your Name]"
+    "sender": "hr@techsolutions.in",
+    "name": "Priya Sharma (HR)",
+    "subject": "Diwali Celebration & Rangoli Competition",
+    "body": "Hi Team, We are hosting a Rangoli competition tomorrow at 4 PM in the cafeteria. Traditional wear is encouraged. Snacks (Samosas and Jalebis) will be served. Attendance is mandatory for the town hall at 5 PM. Let's make this festive!",
+    "timestamp": "2025-11-24 10:00:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_004",
+    "sender": "zomato@food.com",
+    "name": "Zomato",
+    "subject": "You + Biryani = ❤️",
+    "body": "Hey Anush, We saw you looking at that Biryani yesterday. Why play hard to get? Order now and get 40% off. Your stomach called, it wants a treat.",
+    "timestamp": "2025-11-24 13:05:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_005",
+    "sender": "dr.mbogo@trustfund.ng",
+    "name": "Dr. Mbogo",
+    "subject": "URGENT: INHERITANCE CLAIM $5,000,000",
+    "body": "Dearest Beloved, I am the executor of a large estate. You have been named beneficiary. Kindly click this link http://bit.ly/claim-money-now to provide your bank details and pay a small processing fee. God Bless.",
+    "timestamp": "2025-11-24 04:20:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_006",
+    "sender": "project.manager@techsolutions.in",
+    "name": "Amit Verma",
+    "subject": "Urgent: Production Issue - Login Failed",
+    "body": "Hi Anush, We are seeing a spike in 500 errors on the login page. Clients are escalating. Please look into the logs immediately and update the status on the bridge call.",
+    "timestamp": "2025-11-24 14:45:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_007",
+    "sender": "newsletter@finshots.in",
+    "name": "Finshots",
+    "subject": "Why is gold shining again?",
+    "body": "In today's story, we discuss why central banks are hoarding gold and what it means for your portfolio. Plus, a quick look at the EV market slump.",
+    "timestamp": "2025-11-24 08:00:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_008",
+    "sender": "intern@techsolutions.in",
+    "name": "Raju (Intern)",
+    "subject": "Mistake in DB...",
+    "body": "Sir, I think I accidentally deleted the 'test_users' table, but now the main app is not working. Is 'prod_users' linked to it? Please help, I am scared.",
+    "timestamp": "2025-11-24 16:10:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_009",
+    "sender": "support@apple-id-lock.com",
+    "name": "Apple Support",
+    "subject": "Your Apple ID has been locked",
+    "body": "We detected unusual activity on your account. Your ID will be deleted in 12 hours. Verify your identity here: http://apple-verify-secure.com/login. Do not ignore.",
+    "timestamp": "2025-11-24 07:30:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_010",
+    "sender": "swiggy@food.com",
+    "name": "Swiggy",
+    "subject": "It's raining! Chai pakoda time?",
+    "body": "The weather demands it. Hot tea and crispy pakoras delivered in 20 mins. Don't fight the feeling.",
+    "timestamp": "2025-11-24 16:30:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_011",
+    "sender": "admin@incometax.gov.in",
+    "name": "Income Tax Dept",
+    "subject": "Intimation u/s 143(1) for AY 2024-25",
+    "body": "Your return for AY 2024-25 has been processed. There is no demand or refund due. Please check the attached intimation order for details.",
+    "timestamp": "2025-11-24 11:00:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_012",
+    "sender": "ankit.dev@techsolutions.in",
+    "name": "Ankit (Dev)",
+    "subject": "PR Review - Backend API",
+    "body": "Hey, I've pushed the changes for the new API endpoint. Can you review it? I've added comments this time, promise.",
+    "timestamp": "2025-11-24 15:30:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_013",
+    "sender": "promo@lenskart.com",
+    "name": "Lenskart",
+    "subject": "Vincent Chase: Buy 1 Get 1 Free",
+    "body": "Your eyes deserve the best. Grab the trendiest frames now. Gold membership available at Rs. 500.",
+    "timestamp": "2025-11-24 12:45:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_014",
+    "sender": "ceo.urgent@gmail.com",
+    "name": "Rohan Das (CEO)",
+    "subject": "Urgent Task",
+    "body": "I am in a meeting and cannot talk. I need you to purchase 5 Google Play gift cards for a client immediately. Send me the codes here. I will reimburse you.",
+    "timestamp": "2025-11-24 09:45:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_015",
+    "sender": "client@bigcorp.com",
+    "name": "Mr. Smith",
+    "subject": "Q3 Project Roadmap Discussion",
+    "body": "Dear Team, Please find attached the agenda for the Q3 roadmap discussion. We need to finalize the deliverables by Friday. Please come prepared with your estimates.",
+    "timestamp": "2025-11-24 10:30:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_016",
+    "sender": "noreply@aws.amazon.com",
+    "name": "AWS Billing",
+    "subject": "AWS Invoice Available",
+    "body": "Your invoice for the billing period November 2025 is ready. Total amount: $12.45. The payment will be charged to your credit card on file.",
+    "timestamp": "2025-11-24 05:00:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_017",
+    "sender": "sneha.design@techsolutions.in",
+    "name": "Sneha (Design)",
+    "subject": "New UI Assets",
+    "body": "Hi, I've uploaded the new icons to Zeplin. I went with a 'minimalist yet bold' vibe. Let me know if the developers scream at the export settings.",
+    "timestamp": "2025-11-24 14:15:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_018",
+    "sender": "loans@bajajfinserv.in",
+    "name": "Bajaj Finserv",
+    "subject": "Pre-approved Personal Loan Offer",
+    "body": "Dear Customer, You are eligible for a pre-approved personal loan of Rs. 3 Lakhs with minimal documentation. Click here to apply instantly.",
+    "timestamp": "2025-11-24 11:45:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_019",
+    "sender": "admin@society.com",
+    "name": "RWA Secretary",
+    "subject": "Water Supply Disruption",
+    "body": "Dear Residents, Water supply will be disrupted tomorrow from 10 AM to 2 PM due to tank cleaning. Please store water accordingly. Inconvenience is regretted.",
+    "timestamp": "2025-11-24 08:30:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_020",
+    "sender": "jobs@linkedin.com",
+    "name": "LinkedIn Jobs",
+    "subject": "30 new jobs match your profile",
+    "body": "Senior Python Developer at Google, Data Scientist at Microsoft, and more. Apply early to be one of the first applicants.",
+    "timestamp": "2025-11-24 09:00:00",
+    "tags": [],
+    "is_read": false
+  },
+  {
+    "id": "email_021",
+    "sender": "mom@gmail.com",
+    "name": "Mom",
+    "subject": "Pick up cousin",
+    "body": "Rohan is coming to the city today. His train reaches at 6 PM. Go pick him up. Don't be late.",
+    "timestamp": "2025-11-24 12:00:00",
+    "tags": [],
+    "is_read": false
   }
 ]

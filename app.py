@@ -190,8 +190,8 @@ if nav_selection == "Inbox":
                         st.rerun()
                 
                 if email.get("reply"):
-                    with st.expander("Draft Reply", expanded=True):
-                        edited_reply = st.text_area("Edit Reply", value=email["reply"], height=150)
+                    with st.expander(label="Draft Reply", expanded=True):
+                        edited_reply = st.text_area(label="", value=email["reply"], height=150)
                         if st.button("Save Draft"):
                             email["reply"] = edited_reply
                             save_data("mock_inbox.json", st.session_state["emails"])
@@ -205,20 +205,24 @@ if nav_selection == "Inbox":
                 if chat_key not in st.session_state["email_chats"]:
                     st.session_state["email_chats"][chat_key] = []
                 
-                for msg in st.session_state["email_chats"][chat_key]:
-                    with st.chat_message(msg["role"]):
-                        st.markdown(msg["message"])
+                chat_container = st.container()
+                with chat_container:
+                    for msg in st.session_state["email_chats"][chat_key]:
+                        with st.chat_message(msg["role"]):
+                            st.markdown(msg["message"])
                 
                 if prompt := st.chat_input("Ask about this email..."):
                     st.session_state["email_chats"][chat_key].append({"role": "user", "message": prompt})
-                    with st.chat_message("user"):
-                        st.markdown(prompt)
-                    
-                    with st.chat_message("assistant"):
-                        with st.spinner("Thinking..."):
-                            response = process_email(format_email(email), prompt)
-                            st.markdown(response)
+                    with chat_container:
+                        with st.chat_message("user"):
+                            st.markdown(prompt)
+                        
+                        with st.chat_message("assistant"):
+                            with st.spinner("Thinking..."):
+                                response = process_email(format_email(email), prompt)
+                                st.markdown(response)
                     st.session_state["email_chats"][chat_key].append({"role": "assistant", "message": response})
+                    st.rerun()
         else:
             st.info("Select an email to view details.")
 
@@ -239,17 +243,21 @@ elif nav_selection == "Global Agent":
     st.header("🌍 Global Inbox Agent")
     st.markdown("Ask questions about your entire inbox (e.g., 'What are my most urgent tasks?', 'Summarize unread emails').")
     
-    for msg in st.session_state["global_chat"]:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["message"])
+    global_chat_container = st.container()
+    with global_chat_container:
+        for msg in st.session_state["global_chat"]:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["message"])
             
     if prompt := st.chat_input("Ask Global Agent..."):
         st.session_state["global_chat"].append({"role": "user", "message": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        
-        with st.chat_message("assistant"):
-            with st.spinner("Analyzing Inbox..."):
-                response = process_global_query(st.session_state["emails"], prompt)
-                st.markdown(response)
+        with global_chat_container:
+            with st.chat_message("user"):
+                st.markdown(prompt)
+            
+            with st.chat_message("assistant"):
+                with st.spinner("Analyzing Inbox..."):
+                    response = process_global_query(st.session_state["emails"], prompt)
+                    st.markdown(response)
         st.session_state["global_chat"].append({"role": "assistant", "message": response})
+        st.rerun()
