@@ -141,8 +141,8 @@ def generate_auto_reply(email_body: str, user_instructions: str = "") -> str:
     response = chain.invoke(input={"email_body": email_body, "user_instructions": user_instructions})
     return response.content 
 
-def process_global_query(emails: list, query: str, temperature: float = 1.0) -> str:
-    """Processes a query against the entire inbox context."""
+def process_global_query(emails: list, query: str, chat_history: list = [], temperature: float = 1.0) -> str:
+    """Processes a query against the entire inbox context with chat history."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         raise RuntimeError("Groq API Key is absent")
@@ -157,7 +157,13 @@ def process_global_query(emails: list, query: str, temperature: float = 1.0) -> 
     # In a real app, we might need to truncate or use a map-reduce approach
     inbox_context = ""
     for email in emails:
-        inbox_context += f"ID: {email.get('id')}\nFrom: {email.get('name')} <{email.get('sender')}>\nSubject: {email.get('subject')}\nBody: {email.get('body')}\nTags: {email.get('tags')}\nAction Item: {email.get('action_item')}\n\n\n"
+        inbox_context += f"ID: {email.get('id')}\nFrom: {email.get('name')} <{email.get('sender')}>\nSubject: {email.get('subject')}\nBody: {email.get('body')}\nTags: {email.get('tags')}\nAction Item: {email.get('action_item')} \n is_read:{email.get('is_read')}\n\n\n"
+
+    # Format chat history
+    formatted_history = ""
+    for msg in chat_history:
+        role = "User" if msg["role"] == "user" else "Assistant"
+        formatted_history += f"{role}: {msg['message']}\n"
 
     prompt_template = PromptTemplate.from_template(
         """You are an intelligent email assistant. You have access to the user's inbox.
@@ -165,15 +171,18 @@ def process_global_query(emails: list, query: str, temperature: float = 1.0) -> 
         === INBOX CONTENT ===
         {inbox_context}
         
+        === CHAT HISTORY ===
+        {chat_history}
+        
         === USER QUERY ===
         {query}
         
-        Answer the user's query based on the inbox content. Be concise and helpful.
+        Answer the user's query based on the inbox content and chat history[ignore it if it's not relevant to current query or is empty]. Be concise and helpful.
         """
     )
     
     chain = prompt_template | llm
-    response = chain.invoke(input={"inbox_context": inbox_context, "query": query})
+    response = chain.invoke(input={"inbox_context": inbox_context, "chat_history": formatted_history, "query": query})
     return response.content
 
 def generate_draft(prompt: str, recipient:str, recipient_email: str, subject: str, temperature: float = 1.0) -> str:

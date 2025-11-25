@@ -319,7 +319,9 @@ elif nav_selection == "Global Agent":
             
             with st.chat_message("assistant"):
                 with st.spinner("Analyzing Inbox..."):
-                    response = process_global_query(st.session_state["emails"], prompt)
+                    # Get last 3 messages for context
+                    chat_history = st.session_state["global_chat"][-3:] if len(st.session_state["global_chat"]) > 0 else []
+                    response = process_global_query(st.session_state["emails"], prompt, chat_history)
                     st.markdown(response)
         st.session_state["global_chat"].append({"role": "assistant", "message": response})
         st.rerun()
