@@ -93,9 +93,8 @@ if nav_selection == "Prompt Configuration":
 
 if nav_selection == "Inbox":
     st.header("📨 Inbox")
-    
     # Compose Button (Top Right of Inbox Container)
-    col_header, col_compose = st.columns([0.85, 0.15])
+    col_header, col_compose = st.columns([0.88, 0.12])
     with col_compose:
         if st.button("➕ Compose New"): 
             st.session_state["compose_mode"] = not st.session_state["compose_mode"]
@@ -157,8 +156,15 @@ if nav_selection == "Inbox":
     left_col, right_col = st.columns([0.4, 0.6])
     
     with left_col:
+        show_unread = st.checkbox("Show Unread Only")
+        
         with st.container(height=600):
-            for email in st.session_state["emails"]:
+            filtered_emails = [e for e in st.session_state["emails"] if not e.get("is_read")] if show_unread else st.session_state["emails"]
+            
+            if not filtered_emails:
+                st.info("No emails found.")
+                
+            for email in filtered_emails:
                 is_selected = (st.session_state["selected_email"] and st.session_state["selected_email"]['id'] == email['id'])
                 
                 # Mark as read if selected
@@ -185,6 +191,7 @@ if nav_selection == "Inbox":
                             st.rerun()
 
     with right_col:
+        st.space(33)
         if st.session_state["selected_email"]:
             email = st.session_state["selected_email"]
             
