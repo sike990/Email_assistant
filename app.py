@@ -74,9 +74,9 @@ if nav_selection == "Prompt Configuration":
     st.header("⚙️ Prompt Configuration")
    
     with st.form(key="prompt_form"):
-        category = st.text_area(label="**Categorization**", value=st.session_state["prompts"]["categorization"], height=350)
-        action = st.text_area(label="**Action**", value=st.session_state["prompts"]["action_extraction"], height=350)
-        reply = st.text_area(label="**Auto-reply**", value=st.session_state["prompts"]["auto_reply"], height=350)
+        category = st.text_area(label="**Categorization**", value=st.session_state["prompts"]["categorization"], height=200,placeholder="Enter Categorization Prompt eg: Categorize the email into one of the following categories: Meeting, Task, Information, Other.")
+        action = st.text_area(label="**Action**", value=st.session_state["prompts"]["action_extraction"], height=200,placeholder="Enter Action Prompt eg: Extract action items from the email with task and deadline.")
+        reply = st.text_area(label="**Auto-reply**", value=st.session_state["prompts"]["auto_reply"], height=200,placeholder="Enter Auto-reply Prompt eg: Generate an auto-reply for the email with a professional tone.")
         button_container = st.container(horizontal=True)
         with button_container:
             col1,col2,col3,col4,col5 = st.columns([1,1,2,1,1])
