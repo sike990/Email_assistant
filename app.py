@@ -1,7 +1,7 @@
 from services.data_manager import load_payload, save_data
 import streamlit as st 
 import json
-from services.llm_services import process_email, process_global_query, generate_draft
+from services.llm_services import process_email, process_global_query, generate_draft, categorize_email, extract_action_items, generate_auto_reply
 from services.utils import parse_json_output, parse_list_output
 import time
 import re
@@ -52,12 +52,8 @@ def convert_to_relative_format(date_string, reference_date=None):
     return result
 
 def format_email(email: dict) -> str:
-    """Extracts relevant details from email and returns string"""
+    """Extracts relevant details email and returns string"""
     return f"Sender's_name : {email['name']}\nSender's email : {email['sender']}\nRecieved at : {email['timestamp']}\nSubject : {email['subject']}\nBody : {email['body']}"
-
-def format_email_for_reply(email: dict) -> str:
-    """Extracts relevant details from email and returns string"""
-    return f"Sender's_name : {email['name']}\nSender's email : {email['sender']}\nRecieved at : {email['timestamp']}\nSubject : {email['subject']}\nBody : {email['body']}\nTags : {email.get('tags', [])}\nAction Item : {email.get('action_item', {})}"
 
 def select_email(email: dict) -> None:
     st.session_state['selected_email'] = email
@@ -104,11 +100,12 @@ with st.sidebar:
                 st.write("Categorizing and extracting actions...")
                 progress_bar = st.progress(0)
                 for ind, email in enumerate(st.session_state["emails"]):
-                    category_response = process_email(format_email(email), st.session_state["prompts"]["categorization"])
-                    action_response = process_email(format_email(email), st.session_state['prompts']['action_extraction'])
+                    # Use new robust functions
+                    tags = categorize_email(format_email(email), st.session_state["prompts"]["categorization"])
+                    action_items = extract_action_items(format_email(email), st.session_state['prompts']['action_extraction'])
                     
-                    st.session_state['emails'][ind]['tags'] = parse_list_output(category_response)
-                    st.session_state['emails'][ind]['action_item'] = parse_json_output(action_response)
+                    st.session_state['emails'][ind]['tags'] = tags
+                    st.session_state['emails'][ind]['action_item'] = action_items
                     progress_bar.progress((ind + 1) / len(st.session_state["emails"]))
                 status.update(label="Processing Completed!", state="complete", expanded=False)
             save_data("mock_inbox.json", st.session_state["emails"])
@@ -311,7 +308,7 @@ if nav_selection == "Inbox":
                     with col2:
                         if st.button("Generate Reply",width="stretch"):
                             with st.spinner("Generating..."):
-                                reply_draft = process_email(format_email_for_reply(email), st.session_state["prompts"]["auto_reply"])
+                                reply_draft = generate_auto_reply(format_email(email), st.session_state["prompts"]["auto_reply"])
                                 email['reply'] = reply_draft
                                 save_data("mock_inbox.json", st.session_state["emails"])
                             st.rerun()

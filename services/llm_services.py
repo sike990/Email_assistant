@@ -2,24 +2,9 @@ from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
+from services.utils import parse_json_output, parse_list_output
 
 load_dotenv()
-def get_llm_response(prompt:str = "Why do we fall?[A Philosopy question]" , temperature:float = 1.0) -> str:
-    """Returns llm response for prompts"""
-    api_key = os.getenv("GROQ_API_KEY")
-    if not api_key:
-        raise RuntimeError("Groq API Key is absent")
-    
-    llm = ChatGroq(
-        model = "llama-3.3-70b-versatile",
-        groq_api_key = api_key,
-        temperature = temperature
-    )
-    response = llm.invoke(prompt)
-    return response.content
-
-
-
 
 def process_email(email_body:str , instruction_text:str , temperature:float = 1.0):
     """Returns llm response for prompts"""
@@ -33,13 +18,130 @@ def process_email(email_body:str , instruction_text:str , temperature:float = 1.
         temperature = temperature
     )
     chain_prompt = PromptTemplate.from_template(
-        """{instruction_text} \n\n === EMAIL CONTENT === \n {email_body}"""
+        """{instruction_text} \n\n === EMAIL CONTENT === \n {email_body} ===NOTE===\n Do not add any preamble or explanation.Just give the asked output"""
     )
     email_model = chain_prompt | llm
     response = email_model.invoke(input = {"email_body" : email_body , "instruction_text" : instruction_text})
     return response.content 
 
-def process_global_query(emails: list, query: str, temperature: float = 1) -> str:
+def categorize_email(email_body: str, user_instructions: str = "") -> list:
+    """Categorizes email using strict output formatting."""
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise RuntimeError("Groq API Key is absent")
+    
+    llm = ChatGroq(
+        model="llama-3.1-8b-instant",
+        groq_api_key=api_key,
+        temperature=0.0
+    )
+    
+    prompt = PromptTemplate.from_template(
+        """
+        ### INSTRUCTION:
+        Categorize the following email into one or more of the categories using the user instructions.
+        
+        ###USER INSTRUCTIONS:
+        {user_instructions}
+        
+        ### FORMAT(HIGHEST PRIORITY):
+        Return ONLY a comma-separated list of tags. Do not add any preamble or explanation.
+        Example: Important, To-Do
+        
+        ### EMAIL CONTENT:
+        {email_body}
+        
+        ### OUTPUT:
+        """
+    )
+    
+    chain = prompt | llm
+    response = chain.invoke(input={"email_body": email_body, "user_instructions": user_instructions})
+    return parse_list_output(response.content)
+
+def extract_action_items(email_body: str, user_instructions: str = "") -> dict:
+    """Extracts action items using strict JSON formatting."""
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise RuntimeError("Groq API Key is absent")
+    
+    llm = ChatGroq(
+        model="llama-3.1-8b-instant",
+        groq_api_key=api_key,
+        temperature=0.0
+    )
+    
+    prompt = PromptTemplate.from_template(
+        """
+        ### INSTRUCTION:
+        Extract actionable tasks and deadlines from the email using the user instructions.
+        
+        ### USER INSTRUCTIONS:
+        {user_instructions}
+        
+        ### FORMAT(HIGHEST PRIORITY):
+        Respond strictly in JSON format with the following structure:
+        {{
+          "task": "Description of the task",
+          "deadline": "Date/Time or 'None'"
+        }}
+        
+        If there are no clear tasks, return:
+        {{
+          "task": "None",
+          "deadline": "None"
+        }}
+        
+        ### EMAIL CONTENT:
+        {email_body}
+        
+        ### JSON OUTPUT:
+        """
+    )
+    
+    chain = prompt | llm
+    response = chain.invoke(input={"email_body": email_body, "user_instructions": user_instructions})
+    return parse_json_output(response.content)
+
+def generate_auto_reply(email_body: str, user_instructions: str = "") -> str:
+    """Generates a professional auto-reply."""
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise RuntimeError("Groq API Key is absent")
+    
+    llm = ChatGroq(
+        model="llama-3.3-70b-versatile",
+        groq_api_key=api_key,
+        temperature=0.7
+    )
+    
+    prompt = PromptTemplate.from_template(
+        """
+        ### INSTRUCTION:
+        Draft a professional and context-aware reply to the following email.
+        
+        ### USER INSTRUCTIONS:
+        {user_instructions}
+        
+        ### FORMAT(HIGHEST PRIORITY):
+        Return ONLY the body of the reply as a raw string. 
+        Do NOT wrap it in JSON. 
+        Do NOT wrap it in quotes.
+        Do NOT add any preamble like "Here is the draft:".
+        Just start with the salutation (e.g., "Dear Name,").
+        
+        ### EMAIL CONTENT:
+        {email_body}
+        
+        ### DRAFT REPLY:
+        """
+    )
+    
+    chain = prompt | llm
+    response = chain.invoke(input={"email_body": email_body, "user_instructions": user_instructions})
+    return response.content 
+
+def process_global_query(emails: list, query: str, temperature: float = 1.0) -> str:
     """Processes a query against the entire inbox context."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
@@ -55,7 +157,7 @@ def process_global_query(emails: list, query: str, temperature: float = 1) -> st
     # In a real app, we might need to truncate or use a map-reduce approach
     inbox_context = ""
     for email in emails:
-        inbox_context += f"ID: {email.get('id')}\nFrom: {email.get('name')} <{email.get('sender')}>\nSubject: {email.get('subject')}\nBody: {email.get('body')}\nTags: {email.get('tags')}\n\n"
+        inbox_context += f"ID: {email.get('id')}\nFrom: {email.get('name')} <{email.get('sender')}>\nSubject: {email.get('subject')}\nBody: {email.get('body')}\nTags: {email.get('tags')}\nAction Item: {email.get('action_item')}\n\n\n"
 
     prompt_template = PromptTemplate.from_template(
         """You are an intelligent email assistant. You have access to the user's inbox.
@@ -92,10 +194,13 @@ def generate_draft(prompt: str, recipient:str, recipient_email: str, subject: st
         Recipient email: {recipient_email}
         Subject: {subject}
         
-        Instructions/Context:
+        ###Instructions/Context:
         {prompt}
         
-        Return ONLY the body of the email. Do not include the subject line or any preamble.
+        ###Format(Highest Priority):
+        Return ONLY the body of the email in the raw string format. Do not include the subject line or any preamble.
+        
+        ###Output:
         """
     )
     
