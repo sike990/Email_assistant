@@ -1,15 +1,19 @@
 # Email Assistant
 
-A prompt-driven Email Productivity Agent built with Streamlit and LangChain (Groq). This intelligent agent helps you manage your inbox by categorizing emails, extracting action items, drafting replies, and answering global queries about your inbox.
+A smart, prompt-driven productivity tool designed to help you master your inbox. Built with Streamlit and powered by Groq's LLMs, this assistant automates the tedious parts of email management—categorization, action extraction, and drafting—so you can focus on what matters.
 
-## Features
+## Key Features
 
-- **Inbox Management**: View emails with auto-generated categories and tags.
-- **Action Item Extraction**: Automatically identifies tasks and deadlines from emails.
-- **Email Agent Chat**: Chat with individual emails to summarize, ask questions, or generate replies.
-- **Global Inbox Agent**: Ask questions across your entire inbox (e.g., "What are my urgent tasks?").
-- **Compose & Drafts**: Draft new emails from scratch using AI prompts and save them for later.
-- **Prompt Configuration**: Customize the "brain" of the agent by editing prompts for categorization, action extraction, and auto-replies.
+- **Intelligent Inbox**: Your emails are automatically tagged (e.g., "Important", "To-Do") and organized.
+- **Action Extraction**: Never miss a deadline. The assistant scans your emails and highlights actionable tasks and due dates.
+- **Smart Filtering**: Easily toggle the "Show Unread Only" filter to focus on what needs your immediate attention.
+- **Context-Aware Chat**:
+    - **Email Chat**: Ask questions about specific emails or request summaries.
+    - **Global Agent**: Query your entire inbox (e.g., "What are my top priorities today?"). It now remembers your recent conversation context for a smoother experience.
+- **AI-Powered Drafting**:
+    - **Auto-Reply**: Generate professional replies with a single click.
+    - **Compose from Scratch**: Provide a simple instruction (e.g., "Ask John for the Q3 report"), and let the AI draft a polished email for you.
+- **Customizable "Brain"**: Tailor the agent's behavior by editing the system prompts for categorization, extraction, and tone directly from the configuration page.
 
 ## Setup Instructions
 
@@ -20,11 +24,11 @@ A prompt-driven Email Productivity Agent built with Streamlit and LangChain (Gro
     ```
 
 2.  **Install Dependencies**:
-    Ensure you have Python installed. It is recommended to use a virtual environment.
+    We recommend using a virtual environment.
     ```bash
     pip install -r requirements.txt
     ```
-    *(Note: If `requirements.txt` is missing, you'll need `streamlit`, `langchain-groq`, `python-dotenv`, etc.)*
+    *(Ensure you have `streamlit`, `langchain-groq`, `python-dotenv`, and other requirements installed.)*
 
 3.  **Environment Configuration**:
     Create a `.env` file in the root directory and add your Groq API key:
@@ -33,43 +37,41 @@ A prompt-driven Email Productivity Agent built with Streamlit and LangChain (Gro
     ```
 
 4.  **Data Setup**:
-    - `data/mock_inbox.json`: Contains the sample emails.
-    - `data/prompts.json`: Stores user-defined prompts.
-    - `data/new_compose.json`: Stores drafted emails.
+    The application uses JSON files for local storage (simulating a database):
+    - `data/mock_inbox.json`: Sample email data.
+    - `data/prompts.json`: User-defined system prompts.
+    - `data/new_compose.json`: Storage for your drafted emails.
 
 ## How to Run
 
-Run the Streamlit application:
+Launch the application using Streamlit:
 ```bash
 streamlit run app.py
 ```
-
-The application will open in your default web browser (usually at `http://localhost:8501`).
+The app will open automatically in your default browser at `http://localhost:8501`.
 
 ## Usage Guide
 
-### Inbox
-- **View Emails**: Scroll through the list of emails. Important/Unread emails are highlighted.
-- **Open Email**: Click "Open" to view details, extracted action items, and the chat interface.
-- **Compose New**: Click the "➕ Compose New" button to draft a new email. Enter a prompt (e.g., "Invite John to the party") and let the AI write the body. Save it to drafts.
+### 📨 Inbox
+- **Browse & Filter**: Scroll through your emails or use the "Show Unread Only" checkbox to declutter your view.
+- **Deep Dive**: Click "Open" on any email to view its full content, extracted action items, and to start a chat session specific to that email.
+- **Compose**: Click the "➕ Compose New" button to draft a new email. Just give the AI a topic or instruction, and it will handle the writing.
 
-### Global Agent
-- Navigate to "Global Agent" in the sidebar.
-- Ask high-level questions like:
-    - "Summarize the newsletter emails."
-    - "Do I have any deadlines today?"
+### 🌐 Global Agent
+- Switch to the "Global Agent" tab to ask high-level questions about your inbox.
+- Example queries:
+    - "Do I have any urgent emails from HR?"
+    - "Summarize the newsletters I received today."
+- The agent remembers the last few messages, so you can ask follow-up questions naturally.
 
-### Draft Replies
-- Navigate to "Draft Replies" in the sidebar to view your saved drafts.
-
-### Configuration
-- Navigate to "Configuration" to edit the system prompts for Categorization, Action Extraction, and Auto-reply.
+### ⚙️ Configuration
+- Visit the "Prompt Configuration" section to tweak how the AI behaves. You can adjust the instructions for how it categorizes emails, extracts tasks, or adopts a specific tone for replies.
 
 ## Project Structure
 
-- `app.py`: Main Streamlit application.
+- `app.py`: The main application entry point, handling the UI and state management.
 - `services/`:
-    - `data_manager.py`: Handles JSON file I/O.
-    - `llm_services.py`: Interfaces with Groq LLM.
-    - `utils.py`: Helper functions for parsing LLM output.
-- `data/`: JSON storage for emails, prompts, and drafts.
+    - `llm_services.py`: The core logic for interacting with the Groq LLM.
+    - `utils.py`: Helper functions for robust parsing and data formatting.
+    - `data_manager.py`: Handles reading and writing to the JSON data files.
+- `data/`: Local JSON storage.

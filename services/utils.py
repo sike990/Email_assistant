@@ -4,12 +4,16 @@ from datetime import datetime
 
 def parse_json_output(llm_response: str):
     """
-    Robustly extracts JSON from an LLM response, handling Markdown code blocks and raw JSON.
+    Robustly extracts and parses JSON from an LLM response.
+    
+    LLMs often wrap JSON in Markdown code blocks (```json ... ```) or include 
+    conversational filler. This function attempts to strip that away and find 
+    the valid JSON object.
     """
     if not llm_response:
         return {"error": "Empty response"}
 
-    # 1. Try to find a code block
+    # 1. Try to find a code block first, as it's the most reliable indicator
     if "```json" in llm_response:
         pattern = r"```json(.*?)```"
         match = re.search(pattern, llm_response, re.DOTALL)
@@ -21,25 +25,29 @@ def parse_json_output(llm_response: str):
         if match:
             llm_response = match.group(1)
     
-    # 2. Clean whitespace and potential leading/trailing text
+    # 2. Clean whitespace
     llm_response = llm_response.strip()
     
-    # 3. Try to find the first '{' and last '}' to handle non-code-block JSON
+    # 3. Fallback: Try to find the first '{' and last '}' to handle non-code-block JSON
     start_idx = llm_response.find('{')
     end_idx = llm_response.rfind('}')
     
     if start_idx != -1 and end_idx != -1:
         llm_response = llm_response[start_idx:end_idx+1]
     
-    # 4. Parse
+    # 4. Attempt to parse
     try:
         return json.loads(llm_response)
     except json.JSONDecodeError:
+        # Return the raw response for debugging if parsing fails
         return {"error": "Failed to parse JSON", "raw": llm_response}
 
 def parse_list_output(llm_response: str) -> list:
     """
-    Converts a comma-separated string or JSON list into a clean list.
+    Converts a comma-separated string or JSON list into a clean Python list.
+    
+    Handles cases where the LLM returns a Python list string (['a', 'b']) or 
+    just a CSV string (a, b, c).
     """
     if not llm_response:
         return []
@@ -47,15 +55,15 @@ def parse_list_output(llm_response: str) -> list:
     # 1. Handle JSON list format ["Tag1", "Tag2"]
     if "[" in llm_response and "]" in llm_response:
         try:
-            # Try to extract list part
+            # Extract the list part
             start = llm_response.find("[")
             end = llm_response.rfind("]")
             list_str = llm_response[start:end+1]
             return json.loads(list_str)
         except json.JSONDecodeError:
-            pass # Fallback to string splitting
+            pass # Fallback to string splitting if JSON parse fails
 
-    # 2. Remove brackets and quotes for string splitting fallback
+    # 2. Cleanup brackets and quotes for string splitting fallback
     clean_text = llm_response.replace("[", "").replace("]", "").replace('"', '').replace("'", "")
     
     # 3. Split by comma and strip whitespace
@@ -63,14 +71,12 @@ def parse_list_output(llm_response: str) -> list:
 
 def convert_to_relative_format(date_string, reference_date=None):
     """
-    Convert a datetime string to relative format like "Sat, Nov 15, 6:29 PM (9 days ago)"
+    Converts a datetime string to a user-friendly relative format.
+    Example: "Sat, Nov 15, 6:29 PM (9 days ago)"
     
     Args:
         date_string: Input datetime string (e.g., "2025-11-24 09:15:00")
         reference_date: Reference datetime to compare against (defaults to now)
-    
-    Returns:
-        Formatted string with relative time
     """
     # Parse the input datetime
     dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
@@ -97,6 +103,7 @@ def convert_to_relative_format(date_string, reference_date=None):
     elif days_diff > 1:
         relative = f"{days_diff} days ago"
     else:
+        # Future dates (if any)
         relative = f"in {abs(days_diff)} days"
     
     # Combine all parts
@@ -104,7 +111,10 @@ def convert_to_relative_format(date_string, reference_date=None):
     
     return result
 
-def validate_email(email:str)->bool:
-    """Validates the format of valid email and returns bool"""
+def validate_email(email: str) -> bool:
+    """
+    Validates the format of an email address using regex.
+    Returns True if valid, False otherwise.
+    """
     pattern = r"^[A-Za-z0-9\.\_]+[@][A-Za-z0-9\-]+[\.][A-Za-z]{2,}$"
-    return True if re.search(pattern,email) else False   
+    return True if re.search(pattern, email) else False   
