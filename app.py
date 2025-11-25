@@ -2,54 +2,12 @@ from services.data_manager import load_payload, save_data
 import streamlit as st 
 import json
 from services.llm_services import process_email, process_global_query, generate_draft, categorize_email, extract_action_items, generate_auto_reply
-from services.utils import parse_json_output, parse_list_output
+from services.utils import convert_to_relative_format,validate_email
 import time
-import re
-from datetime import datetime
+
+
 
 # --- Helper Functions ---
-def convert_to_relative_format(date_string, reference_date=None):
-    """
-    Convert a datetime string to relative format like "Sat, Nov 15, 6:29 PM (9 days ago)"
-    
-    Args:
-        date_string: Input datetime string (e.g., "2025-11-24 09:15:00")
-        reference_date: Reference datetime to compare against (defaults to now)
-    
-    Returns:
-        Formatted string with relative time
-    """
-    # Parse the input datetime
-    dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
-    
-    # Use provided reference date or current time
-    if reference_date is None:
-        reference_date = datetime.now()
-    
-    # Calculate time difference
-    time_diff = reference_date - dt
-    days_diff = time_diff.days
-    
-    # Format the date part: "Sat, Nov 15"
-    formatted_date = dt.strftime("%a, %b %d")
-    
-    # Format the time part: "6:29 PM"
-    formatted_time = dt.strftime("%I:%M %p").lstrip('0')
-    
-    # Determine relative time string
-    if days_diff == 0:
-        relative = "today"
-    elif days_diff == 1:
-        relative = "yesterday"
-    elif days_diff > 1:
-        relative = f"{days_diff} days ago"
-    else:
-        relative = f"in {abs(days_diff)} days"
-    
-    # Combine all parts
-    result = f"{formatted_date}, {formatted_time} ({relative})"
-    
-    return result
 
 def format_email(email: dict) -> str:
     """Extracts relevant details email and returns string"""
@@ -58,9 +16,7 @@ def format_email(email: dict) -> str:
 def select_email(email: dict) -> None:
     st.session_state['selected_email'] = email
 
-def validate_email(email:str)->bool:
-    pattern = r"^[A-Za-z0-9\.\_]+[@][A-Za-z0-9\-]+[\.][A-Za-z]{2,}$"
-    return True if re.search(pattern,email) else False   
+
 
 
 # --- Page Config ---
