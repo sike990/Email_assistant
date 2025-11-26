@@ -7,7 +7,7 @@ A smart, prompt-driven productivity tool designed to help you master your inbox.
 <br>
 ![User Interface](https://github.com/sike990/Email_assistant/releases/tag/demo)<br>
 <br>
-![Demo Video](https://drive.google.com/file/d/1dVrQ4-vCc4pJy-sXFtkJCnTVIwkRe84w/view?usp=sharing)<br>
+[Demo Video](https://drive.google.com/file/d/1dVrQ4-vCc4pJy-sXFtkJCnTVIwkRe84w/view?usp=sharing)<br>
 ## Key Features
 
 ### 📧 Intelligent Inbox
