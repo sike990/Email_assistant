@@ -3,9 +3,7 @@
 A smart, prompt-driven productivity tool designed to help you master your inbox. Built with Streamlit and powered by Groq's LLMs, this assistant automates the tedious parts of email management—categorization, action extraction, and drafting—so you can focus on what matters.
 
 <!-- Application Demo Video -->
-<video src="assets/UI.mp4" controls="controls" style="max-width: 100%;"> 
-  Your browser does not support the video tag. 
-</video>
+![Demo](https://github.com/sike990/Email_assistant/blob/main/assets/UI.mp4)
 
 ## Key Features
 
